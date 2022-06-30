@@ -5,7 +5,7 @@
 # Available variables for glue substitution:
 # * ci: confidence interval
 # * branches: BASE and HEAD branches benchmarked against each other.
-# See `?touchstone::pr_comment`
+# See `?Rperform::pr_comment`
 glue::glue(
   "This is how benchmark results would change (along with a",
   " {100 * ci}% confidence interval in relative change) if ",

@@ -42,16 +42,16 @@ branch_get_or_fail <- function(var) {
   if (!nzchar(retrieved)) {
     if (rlang::is_interactive()) {
       cli::cli_alert_info(c(paste0(
-        "touchstone not activated. Most likely, you want to run ",
-        "{.code touchstone::activate()} and the below error should go away."
+        "Rperform not activated. Most likely, you want to run ",
+        "{.code Rperform::activate()} and the below error should go away."
       )))
     }
     cli::cli_abort(c(paste0(
       "If you don't specify the argument {.arg branch(s)}, you must set the environment ",
-      "variable {.envvar {var}} to tell {.pkg touchstone} ",
+      "variable {.envvar {var}} to tell {.pkg Rperform} ",
       "which branches you want to benchmark against each other."
     ),
-    "i" = "See {.code ?touchstone::run_script}."
+    "i" = "See {.code ?Rperform::run_script}."
     ))
   } else {
     retrieved
