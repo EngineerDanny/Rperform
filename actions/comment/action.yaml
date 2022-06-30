@@ -1,5 +1,5 @@
 name: 'comment'
-description: 'Action to comment {touchstone} results on the appropriate PR. Needs read/write access.'
+description: 'Action to comment Rperform results on the appropriate PR. Needs read/write access.'
 inputs:
   GITHUB_TOKEN:
     description: 'The GITHUB_TOKEN secret.'
@@ -69,5 +69,5 @@ runs:
             state: state,
             target_url: url,
             description: description,
-            context: 'touchstone comment'
+            context: 'rperform comment'
           })
