@@ -68,13 +68,13 @@ runs:
       shell: Rscript {0}
     - name: Uploading Results
       run: |
-        echo ${{ github.event.number }} > ./rperform/pr-comment/NR
+        echo "Uploading results..."
       shell: bash
     # - uses: actions/upload-artifact@v2
     #   with:
     #     name: visual-benchmarks
     #     path: rperform/plots/
-    
+
     # - uses: actions/upload-artifact@v2
     #   with:
     #     name: results
