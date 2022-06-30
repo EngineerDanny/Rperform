@@ -14,10 +14,13 @@ Imports:
     ggplot2 (>= 1.0.1),
     testthat (>= 0.10.0),
     devtools (>= 1.8.0),
-    microbenchmark (>= 1.4-2)
+    microbenchmark (>= 1.4-2),
+    cli (>= 3.0.1),
+    fs (>= 1.5.2)
 Suggests:
     animint2,
     rmarkdown,
+    glue,
     knitr
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
