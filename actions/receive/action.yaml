@@ -17,7 +17,7 @@ inputs:
   rperform_ref:
     description: "Which branch or tag of Rperform should be used. Mainly for debugging."
     required: true
-    default: "@v1"
+    default: "@github-actions"
 
 runs:
   using: "composite"

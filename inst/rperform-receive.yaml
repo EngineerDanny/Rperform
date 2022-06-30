@@ -39,7 +39,7 @@ jobs:
       # RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: EngineerDanny/Rperform/actions/receive@v1
+      - uses: EngineerDanny/Rperform/actions/receive@github-actions
         with:
           cache-version: 1
           benchmarking_repo: ${{ matrix.config.benchmarking_repo }}
