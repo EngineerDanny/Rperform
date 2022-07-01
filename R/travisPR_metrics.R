@@ -233,7 +233,7 @@ plot_PR <- function(test_path, metric = "time") {
                        mapping = ggplot2::aes(x = same_commit$cnum_b2 + 0.7,
                                               y = mid_val,
                                               label = dir1, angle = -90)) +                     
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -90),
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -45),
                    strip.text.x = ggplot2::element_text(size = 10, face = "bold")) +
     ggplot2::geom_vline(mapping = ggplot2::aes(xintercept = same_commit$cnum_b2 + 0.5)) +
     ggplot2::scale_x_discrete(limits = rev(levels(PR_data$message))) +

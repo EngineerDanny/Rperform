@@ -26,7 +26,7 @@ Rperform::plot_webpage(test_directory = "./tests/testthat/", metric = "testMetri
 # time_plot <- ggplot2::qplot(message, metric_val, data = time_data) +
 #   ggplot2::facet_grid(facets =  test_name ~ ., scales = "free") +
 #   ggplot2::geom_point(color = "blue") + 
-#   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -90)) +
+#   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -45)) +
 #   ggplot2::scale_x_discrete(limits = rev(levels(time_data$message))) +
 #   # In the above 3 lines code, the first line creates the basic qplot. The 
 #   # second and third lines display the x-axis labels at 90 degrees to the 

@@ -138,7 +138,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
       ggplot2::ggplot(data = test_frame, mapping = ggplot2::aes(message, metric_val)) +
       ggplot2::geom_point(color = "blue") + 
       ggplot2::facet_grid(facets = metric_name ~ ., scales = "free") +
-      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -90)) +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -45)) +
       ggplot2::scale_x_discrete(limits = rev(levels(test_frame$message))) +
       # In the above 5 lines of code, the first line creates the basic qplot. The
       # fourth and fifth lines display the x-axis labels at 90 degrees to the
@@ -240,7 +240,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
     ggplot2::geom_point(mapping = ggplot2::aes(message, metric_val), 
                         data = time_data, color = "blue") +
     ggplot2::facet_grid(facets =  test_name ~ ., scales = "free") +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -90)) +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -45)) +
     ggplot2::scale_x_discrete(limits = rev(levels(time_data$message))) +
     # In the above 5 lines of code, the first line creates the basic qplot. The
     # fourth and fifth lines display the x-axis labels at 90 degrees to the
@@ -340,7 +340,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
   tryCatch(expr = {test_plot <- 
     ggplot2::ggplot(data = mem_data, mapping = ggplot2::aes(message, metric_val)) +
     ggplot2::geom_point(color = "blue") +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -90),
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -45),
                    strip.text.x = ggplot2::element_text(size = 10, face = "bold")) +
     ggplot2::scale_x_discrete(limits = rev(levels(mem_data$message))) +
     ggplot2::facet_grid(test_name ~ metric_name, scales = "free") +
@@ -676,7 +676,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
                          mapping = ggplot2::aes(x = same_commit$cnum_b2 + 0.7, 
                                                 y = mid_val,
                                                 label = branch1, angle = -90)) +
-      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -90)) +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -45)) +
       ggplot2::geom_vline(mapping = ggplot2::aes(xintercept = same_commit$cnum_b2 + 0.5)) +
       ggplot2::scale_x_discrete(limits = rev(levels(test_frame$message))) +
       # In the above 6 lines of code, the first line creates
@@ -752,7 +752,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
                        mapping = ggplot2::aes(x = same_commit$cnum_b2 + 0.7,
                                               y = mid_val,
                                               label = branch1, angle = -90)) +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -90)) +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -45)) +
     ggplot2::geom_vline(mapping = ggplot2::aes(xintercept = same_commit$cnum_b2 + 0.5)) +
     ggplot2::scale_x_discrete(limits = rev(levels(time_data$message))) +
     # In the above 8 lines of code, the first line creates
@@ -826,7 +826,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
                        mapping = ggplot2::aes(x = same_commit$cnum_b2 + 0.7,
                                               y = mid_val,
                                               label = branch1, angle = -90)) +                     
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -90),
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -45),
                    strip.text.x = ggplot2::element_text(size = 10, face = "bold")) +
     ggplot2::geom_vline(mapping = ggplot2::aes(xintercept = same_commit$cnum_b2 + 0.5)) +
     ggplot2::scale_x_discrete(limits = rev(levels(mem_data$message))) +
