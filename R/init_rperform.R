@@ -1,6 +1,12 @@
 
 #' Initializes Rperform by generating some files and adding them to the
 #' rperform directory. It also makes Github Workflow Set-Up simpler.
+#'
+#' @param overwrite A Boolean.
+#'
+#' @return Returns a (temporarily) invisible copy of an object.
+#'
+#' @examples init_rperform()
 init_rperform <- function(overwrite = FALSE) {
   rperform_dir <- dir_rperform()
   fs::dir_create(rperform_dir)
@@ -69,6 +75,10 @@ init_rperform <- function(overwrite = FALSE) {
 }
 
 #' Copies a file if it doesn't exist.
+#'
+#' @param path 
+#' @param new_path 
+#' @param overwrite 
 copy_if_not_exists <- function(path, new_path, overwrite = FALSE) {
   if (!fs::file_exists(new_path) || overwrite) {
     fs::file_copy(
@@ -88,6 +98,10 @@ copy_if_not_exists <- function(path, new_path, overwrite = FALSE) {
 }
 
 #' Runs the Rperform script.
+#' 
+#' @param dir A String.
+#' 
+#' @examples run_script("inst/script.R")
 run_script <- function(path = "inst/script.R") {
   # force(branch)
   # rlang::with_interactive(
