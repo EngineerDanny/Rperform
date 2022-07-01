@@ -1,12 +1,20 @@
-
+#' Gets the directory of the rperform generated folder
 dir_rperform <- function() {
   getOption("rperform.dir", "rperform")
 }
 
+#' Gets the path to the Rperform script
 path_rperform_script <- function() {
   fs::path(dir_rperform(), "script.R")
 }
 
+#' Appends dir to Rbuildignore
+#'
+#' @param dir A String.
+#'
+#' @return A cli object
+#'
+#' @examples append_rbuildignore("Rperform")
 append_rbuildignore <- function(dir) {
   ignore <- ".Rbuildignore"
   dir_str <- glue::glue("^{dir}$")

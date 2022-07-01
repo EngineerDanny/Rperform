@@ -1,5 +1,6 @@
 
-
+#' Initializes Rperform by generating some files and adding them to the
+#' rperform directory. It also makes Github Workflow Set-Up simpler.
 init_rperform <- function(overwrite = FALSE) {
   rperform_dir <- dir_rperform()
   fs::dir_create(rperform_dir)
@@ -67,6 +68,7 @@ init_rperform <- function(overwrite = FALSE) {
   invisible(NULL)
 }
 
+#' Copies a file if it doesn't exist.
 copy_if_not_exists <- function(path, new_path, overwrite = FALSE) {
   if (!fs::file_exists(new_path) || overwrite) {
     fs::file_copy(
@@ -85,7 +87,7 @@ copy_if_not_exists <- function(path, new_path, overwrite = FALSE) {
   }
 }
 
-
+#' Runs the Rperform script.
 run_script <- function(path = "inst/script.R") {
   # force(branch)
   # rlang::with_interactive(
