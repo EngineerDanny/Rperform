@@ -4,6 +4,9 @@ inputs:
   GITHUB_TOKEN:
     description: "The GITHUB_TOKEN secret."
     required: true
+  ISSUE_NUMBER:
+    description: "The Issue Number to comment on."
+    required: true  
 runs:
   using: "composite"
   steps:
@@ -36,7 +39,8 @@ runs:
       with:
         script: |
           console.log("Commenting on PR...")
-          console.log(github.event)            
+          console.log(ISSUE_NUMBER)
+                      
           await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
