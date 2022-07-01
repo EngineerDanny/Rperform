@@ -70,10 +70,10 @@ runs:
       run: |
         echo "Uploading results..."
       shell: bash
-    # - uses: actions/upload-artifact@v2
-    #   with:
-    #     name: visual-benchmarks
-    #     path: rperform/plots/
+    - uses: actions/upload-artifact@v2
+      with:
+        name: pr
+        path: Rperform_timeMetrics/Test_test-join.png
 
     # - uses: actions/upload-artifact@v2
     #   with:
