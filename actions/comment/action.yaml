@@ -34,7 +34,9 @@ runs:
       id: "comment"
       uses: actions/github-script@v6
       with:
-        script: |       
+        script: |
+          console.log("Commenting on PR...")
+          console.log(github.event)            
           await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
