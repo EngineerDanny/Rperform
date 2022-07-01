@@ -23,4 +23,4 @@ Suggests:
     glue,
     knitr
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
+RoxygenNote: 7.2.0

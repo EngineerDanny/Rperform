@@ -6,6 +6,9 @@
 \usage{
 run_script(path = "inst/script.R")
 }
+\arguments{
+\item{path}{A String.}
+}
 \description{
 Runs the Rperform script.
 }

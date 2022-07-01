@@ -7,6 +7,12 @@ rperform directory. It also makes Github Workflow Set-Up simpler.}
 \usage{
 init_rperform(overwrite = FALSE)
 }
+\arguments{
+\item{overwrite}{A Boolean.}
+}
+\value{
+Returns a (temporarily) invisible copy of an object.
+}
 \description{
 Initializes Rperform by generating some files and adding them to the
 rperform directory. It also makes Github Workflow Set-Up simpler.

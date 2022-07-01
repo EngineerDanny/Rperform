@@ -6,6 +6,13 @@
 \usage{
 copy_if_not_exists(path, new_path, overwrite = FALSE)
 }
+\arguments{
+\item{path}{Path to current file}
+
+\item{new_path}{New path of the current file}
+
+\item{overwrite}{A Boolean.}
+}
 \description{
 Copies a file if it doesn't exist.
 }
