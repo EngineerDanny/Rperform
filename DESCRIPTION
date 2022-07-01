@@ -21,6 +21,7 @@ Suggests:
     animint2,
     rmarkdown,
     glue,
+    rlang,
     knitr
 VignetteBuilder: knitr
 RoxygenNote: 7.2.0
