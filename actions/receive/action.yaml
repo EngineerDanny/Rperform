@@ -47,7 +47,7 @@ runs:
           any::dplyr
           any::gert
           any::glue
-          github::EngineerDanny/rperform${{ inputs.rperform_ref}}
+          github::EngineerDanny/Rperform${{ inputs.rperform_ref}}
     - name: Remove global installation
       run: |
         pkg <- unlist(read.dcf('DESCRIPTION')[, 'Package'])
