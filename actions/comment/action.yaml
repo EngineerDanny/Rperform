@@ -1,14 +1,14 @@
-name: 'comment'
-description: 'Action to comment Rperform results on the appropriate PR. Needs read/write access.'
+name: "comment"
+description: "Action to comment Rperform results on the appropriate PR. Needs read/write access."
 inputs:
   GITHUB_TOKEN:
-    description: 'The GITHUB_TOKEN secret.'
+    description: "The GITHUB_TOKEN secret."
     required: true
 runs:
   using: "composite"
   steps:
-    - name: 'Download artifact'
-      id: 'download'
+    - name: "Download artifact"
+      id: "download"
       uses: actions/github-script@v3.1.0
       with:
         script: |
@@ -30,18 +30,19 @@ runs:
           fs.writeFileSync('${{github.workspace}}/pr.zip', Buffer.from(download.data));
     - run: unzip pr.zip
       shell: bash
-    - name: 'Comment on PR'
-      id: 'comment'
+    - name: "Comment on PR"
+      id: "comment"
       uses: actions/github-script@v6
       with:
         script: |
-          console.log(context);       
-          await github.issues.createComment({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: context.issue.number,
-            body: '👋 Thanks for reporting!'
+          console.log(context);
+          github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for reporting!'
           });
+
     - uses: actions/github-script@v5
       if: always()
       with:
@@ -50,7 +51,7 @@ runs:
           let any_failed = ${{ steps.comment.outcome == 'failure' || steps.download.outcome == 'failure' }}
           let state = 'success'
           let description = 'Commenting succeeded!'
-          
+
           if(${{ github.event.workflow_run.conclusion == 'failure'}} || any_failed) {
             state = 'failure'
             description = 'Commenting failed!'
