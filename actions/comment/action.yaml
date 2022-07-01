@@ -32,12 +32,10 @@ runs:
       shell: bash
     - name: "Comment on PR"
       id: "comment"
-      uses: actions/github-script@v3
+      uses: actions/github-script@v6
       with:
-        github-token: ${{ inputs.GITHUB_TOKEN }}
         script: |       
-          console.log(context.issue.number)
-          await github.issues.createComment({
+          await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
             issue_number: 2,
