@@ -867,6 +867,15 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
   if (!dir.exists("./Rperform_Data")){
     dir.create(path = "./Rperform_Data")
   }
+
+ # Create a directory for storing PR comment
+  if (!dir.exists("./rperform/pr-comment")){
+    dir.create(path = "./rperform/pr-comment")
+  }
+  # convert metric_frame to hmtl table
+  print(xtable::xtable(metric_frame), type = "html",
+  file = "./rperform/pr-comment/results.txt")
+  
   
   if(grepl(pattern = "time", x = replacement) > 0) {
     time_frame <- metric_frame
