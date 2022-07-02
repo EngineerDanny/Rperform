@@ -16,7 +16,8 @@ Imports:
     devtools (>= 1.8.0),
     microbenchmark (>= 1.4-2),
     cli (>= 3.0.1),
-    fs (>= 1.5.2)
+    fs (>= 1.5.2),
+    xtable (>= 1.8.0)
 Suggests:
     animint2,
     rmarkdown,
