@@ -70,10 +70,17 @@ runs:
       run: |
         echo "Uploading results..."
       shell: bash
+
+    - name: Saves the PR number in an artifact
+      shell: bash
+      env:
+        PULL_REQUEST_NUMBER: ${{ github.event.number }}
+      run: echo $PULL_REQUEST_NUMBER > ./Rperform_timeMetrics/PR_NO
+
     - uses: actions/upload-artifact@v2
       with:
         name: pr
-        path: Rperform_timeMetrics/Test_test-join.png
+        path: Rperform_timeMetrics/
 
     # - uses: actions/upload-artifact@v2
     #   with:

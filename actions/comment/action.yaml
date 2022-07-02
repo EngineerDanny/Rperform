@@ -4,9 +4,7 @@ inputs:
   GITHUB_TOKEN:
     description: "The GITHUB_TOKEN secret."
     required: true
-  ISSUE_NUMBER:
-    description: "The Issue Number to comment on."
-    required: true  
+
 runs:
   using: "composite"
   steps:
@@ -38,15 +36,18 @@ runs:
       uses: actions/github-script@v6
       with:
         script: |
-          console.log("Commenting on PR...")
-          console.log(ISSUE_NUMBER)
+          var fs = require('fs');
+          var issue_number = Number(fs.readFileSync('./PR_NO'));
                       
+          console.log("Commenting on PR...");
+          console.log(issue_number);
           await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
             issue_number: 2,
             body: '👋 Thanks for reporting!'
           });
+          
     - uses: actions/github-script@v5
       if: always()
       with:
