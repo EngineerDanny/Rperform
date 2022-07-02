@@ -75,17 +75,12 @@ runs:
       shell: bash
       env:
         PULL_REQUEST_NUMBER: ${{ github.event.number }}
-      run: echo $PULL_REQUEST_NUMBER > ./Rperform_timeMetrics/PR_NO
+      run: echo $PULL_REQUEST_NUMBER > ./rperform/pr-comment/PR_NO
 
     - uses: actions/upload-artifact@v2
       with:
         name: pr
-        path: Rperform_timeMetrics/
-
-    # - uses: actions/upload-artifact@v2
-    #   with:
-    #     name: results
-    #     path: rperform/pr-comment
+        path: rperform/pr-comment/
     # - uses: actions/download-artifact@v2
     #   with:
     #     name: results
