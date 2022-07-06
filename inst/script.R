@@ -29,3 +29,13 @@
 #    num_commits = 2,
 #    save_data = TRUE
 # )
+
+## TEST 5
+#  Rperform::plot_branchmetrics(
+#    test_path = "inst/tests/test-check.r",
+#    metric = "time",
+#    branch1 = "rperform_test",
+#    branch2 = "master",
+#    save_data = T,
+#    save_plots = F
+# )
