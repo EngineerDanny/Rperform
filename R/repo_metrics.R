@@ -269,7 +269,8 @@ time_commit <- function(test_path, test_commit) {
 #'   comparisons.
 #' @param num_commits Number of commits (versions) against which the file is to
 #'   be tested, with default being 10.
-#'   
+#' @param save_data Boolean value indicating whether the data-frame should be
+#'   saved to a file. Default is FALSE.
 #' @examples
 #' 
 #' \dontrun{
@@ -308,7 +309,7 @@ time_commit <- function(test_path, test_commit) {
 # (if successful), datetime and message corresponding to the commit the value is
 # for.
 
-time_compare <- function(test_path, num_commits = 10) {
+time_compare <- function(test_path, num_commits = 10, save_data = FALSE) {
   stopifnot(is.character(test_path))
   stopifnot(length(test_path) == 1)
   stopifnot(is.numeric(num_commits))
@@ -325,6 +326,19 @@ time_compare <- function(test_path, num_commits = 10) {
   } 
   
   test_results <- do.call(rbind, result_list)
+  # If save_data is TRUE, save the data-frame to a file.
+  if (save_data) {
+    # Create a directory for storing PR comment
+    if (!dir.exists("./rperform/pr-comment")) {
+      dir.create(path = "./rperform/pr-comment")
+    }
+    # convert test_results to hmtl table
+    print(xtable::xtable(test_results),
+      type = "html",
+      file = "./rperform/pr-comment/results.txt"
+    )
+  }
+
   test_results
 }
 
@@ -585,7 +599,8 @@ get_mem <- function(test_path, commit_num = 1) {
 #' @param test_path File-path for the test file which is to be checked.
 #' @param num_commits number of commits against all of which the memory stats
 #'   are to be checked starting from the most recent one.
-#'   
+#' @param save_data Boolean value indicating whether the data-frame should be
+#'   saved to a file. Default is FALSE.  
 #' @examples
 #' 
 #' \dontrun{
@@ -623,7 +638,7 @@ get_mem <- function(test_path, commit_num = 1) {
 # utilized during the file's execution. It does so against the specified number
 # of commits from the git log in the current git repository.
 
-mem_compare <- function(test_path, num_commits = 10) {
+mem_compare <- function(test_path, num_commits = 10, save_data = FALSE) {
   stopifnot(is.character(test_path))
   stopifnot(length(test_path) == 1)
   stopifnot(is.numeric(num_commits))
@@ -647,8 +662,22 @@ mem_compare <- function(test_path, num_commits = 10) {
   
   system("rm *RSS*")
   system("rm mem_result.RData")
-  do.call(what = rbind, args = result_list)
-  
+  test_results <- do.call(what = rbind, args = result_list)
+
+    # If save_data is TRUE, save the data-frame to a file.
+  if (save_data) {
+    # Create a directory for storing PR comment
+    if (!dir.exists("./rperform/pr-comment")) {
+      dir.create(path = "./rperform/pr-comment")
+    }
+    # convert test_results to hmtl table
+    print(xtable::xtable(test_results),
+      type = "html",
+      file = "./rperform/pr-comment/results.txt"
+    )
+  }
+
+  test_results  
 }
 
 ##  -----------------------------------------------------------------------------------------
