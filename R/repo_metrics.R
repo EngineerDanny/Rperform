@@ -314,6 +314,8 @@ time_compare <- function(test_path, num_commits = 10, save_data = FALSE) {
   stopifnot(length(test_path) == 1)
   stopifnot(is.numeric(num_commits))
   stopifnot(length(num_commits) == 1)
+  stopifnot(is.logical(save_data))
+  stopifnot(length(save_data) == 1)
   num_commits <- floor(num_commits)
   
   target <- git2r::repository("./")
@@ -643,6 +645,8 @@ mem_compare <- function(test_path, num_commits = 10, save_data = FALSE) {
   stopifnot(length(test_path) == 1)
   stopifnot(is.numeric(num_commits))
   stopifnot(length(num_commits) == 1)
+  stopifnot(is.logical(save_data))
+  stopifnot(length(save_data) == 1)
   num_commits <- floor(num_commits)
   
   script.R <- system.file("exec", "get_mem.R", package="Rperform")
