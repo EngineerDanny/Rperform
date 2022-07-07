@@ -68,6 +68,9 @@ runs:
       shell: Rscript {0}
     - name: Uploading Results
       run: |
+        git add rperform
+        git commit -m "Benchmarking results"
+        git push origin HEAD:$GITHUB_HEAD_REF        
         echo "Uploading results..."
       shell: bash
 
@@ -75,12 +78,12 @@ runs:
       shell: bash
       env:
         PULL_REQUEST_NUMBER: ${{ github.event.number }}
-      run: echo $PULL_REQUEST_NUMBER > ./rperform/pr-comment/PR_NO
+      run: echo $PULL_REQUEST_NUMBER > ./rperform/results/PR_NO
 
     - uses: actions/upload-artifact@v2
       with:
         name: pr
-        path: rperform/pr-comment/
+        path: rperform/results/
     # - uses: actions/download-artifact@v2
     #   with:
     #     name: results
