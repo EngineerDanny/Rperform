@@ -868,7 +868,8 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
 ##  -----------------------------------------------------------------------------------------
 ##  -----------------------------------------------------------------------------------------
 
-.save_data <- function(metric_frame, pattern = "*.[rR]$", replacement, replace_string, sys_time) {
+.save_data <- function(metric_frame, pattern = "*.[rR]$", 
+        replacement, replace_string, sys_time = Sys.time()) {
 
   # get date time in milliseconds
   date_time <- as.integer(sys_time)
