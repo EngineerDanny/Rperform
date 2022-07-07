@@ -75,12 +75,14 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
   stopifnot(is.logical(save_plots))
   stopifnot(length(save_plots) == 1)
   floor(num_commits)
+
+  sys_time <- Sys.time()
   
   if (metric == "time") {
     if (interactive) {
       temp_out <- capture.output(.plot_interactive_time(test_path, num_commits, save_data, save_plots))
     } else {
-      temp_out <- capture.output(.plot_time(test_path, num_commits, save_data, save_plots))      
+      temp_out <- capture.output(.plot_time(test_path, num_commits, save_data, save_plots, sys_time))      
     }
   }
   else if (metric == "memory") {
@@ -95,7 +97,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
       temp_out <- capture.output(.plot_interactive_time(test_path, num_commits, save_data, save_plots))
       temp_out <- capture.output(.plot_interactive_mem(test_path, num_commits, save_data, save_plots))      
     } else {
-      temp_out <- capture.output(.plot_time(test_path, num_commits, save_data, save_plots))
+      temp_out <- capture.output(.plot_time(test_path, num_commits, save_data, save_plots,sys_time))
       temp_out <- capture.output(.plot_mem(test_path, num_commits, save_data, save_plots))
     }
   }
@@ -220,15 +222,18 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
 ##  -----------------------------------------------------------------------------------------
 
 
-.plot_time <- function(test_path, num_commits, save_data, save_plots) {
+.plot_time <- function(test_path, num_commits, save_data, save_plots, sys_time) {
   # Obtain the metrics data
   suppressMessages(time_data <- time_compare(test_path, num_commits))
   # Store the metrics data if save_data is TRUE
   if (save_data){
     
     # Store the metric data
-    .save_data(time_data, pattern = "*.[rR]$", replacement = "_time.RData",
-               replace_string = basename(test_path))
+    .save_data(time_data,
+      pattern = "*.[rR]$", replacement = "_time.RData",
+      replace_string = basename(test_path),
+      sys_time = sys_time
+    )
   }
   
   curr_name <- gsub(pattern = " ", replacement = "_", x = basename(test_path))
@@ -251,8 +256,10 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
     ggplot2::ggtitle(label = paste0("Variation in time metrics for ", curr_name))
   
   if (save_plots == TRUE) {
-    .save_plots(test_plot = test_plot, test_name = curr_name, metric = "time",
-                width = 1600, height = 1200)
+    .save_plots(
+      test_plot = test_plot, test_name = curr_name, metric = "time",
+      width = 1600, height = 1200, sys_time = sys_time
+    )
     print(test_plot)
   }
   else {
@@ -861,63 +868,94 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
 ##  -----------------------------------------------------------------------------------------
 ##  -----------------------------------------------------------------------------------------
 
-.save_data <- function(metric_frame, pattern = "*.[rR]$", replacement, replace_string) {
-  
+.save_data <- function(metric_frame, pattern = "*.[rR]$", replacement, replace_string, sys_time) {
+
+  # get date time in milliseconds
+  date_time <- as.integer(sys_time)
+
+  # prepare rperform directory for the plots
+  if (grepl(pattern = "time", x = replacement) > 0) {
+    target_dir <- paste0("./rperform/results/Time_Metrics_", date_time)
+    time_frame <- metric_frame
+    prepare_dir(target_dir)
+    # Save the metric data as csv file
+    csv_file <- file.path(target_dir, paste0("test_data", ".csv"))
+    write.csv2(time_frame,
+      file = csv_file
+    )
+    create_pr_comment(time_frame, "test_function", target_dir)
+  } else if (grepl(pattern = "mem", x = replacement) > 0) {
+    target_dir <- paste0("./rperform/results/Memory_Metrics_", date_time)
+    mem_frame <- metric_frame
+    prepare_dir(target_dir)
+    # Save the metric data as csv file
+    csv_file <- file.path(target_dir, paste0("test_data", ".csv"))
+
+    write.csv2(mem_frame,
+      file = csv_file
+    )
+    create_pr_comment(mem_frame, "test_function", target_dir)
+  }
+
+
+
+
+
   # Create a directory for storing the metric data
-  if (!dir.exists("./Rperform_Data")){
+  if (!dir.exists("./Rperform_Data")) {
     dir.create(path = "./Rperform_Data")
   }
 
- # Create a directory for storing PR comment
-  if (!dir.exists("./rperform/pr-comment")){
+  # Create a directory for storing PR comment
+  if (!dir.exists("./rperform/pr-comment")) {
     dir.create(path = "./rperform/pr-comment")
   }
   # convert metric_frame to hmtl table
-  print(xtable::xtable(metric_frame), type = "html",
-  file = "./rperform/pr-comment/results.txt")
-  
-  
-  if(grepl(pattern = "time", x = replacement) > 0) {
+  print(xtable::xtable(metric_frame),
+    type = "html",
+    file = "./rperform/pr-comment/results.txt"
+  )
+
+
+  if (grepl(pattern = "time", x = replacement) > 0) {
     time_frame <- metric_frame
-    save(time_frame, file = file.path("Rperform_Data", sub(pattern = pattern,
-                                                           replacement = replacement,
-                                                           x = basename(replace_string))))
-  }
-  else if(grepl(pattern = "mem", x = replacement) > 0){
+    save(time_frame, file = file.path("Rperform_Data", sub(
+      pattern = pattern,
+      replacement = replacement,
+      x = basename(replace_string)
+    )))
+  } else if (grepl(pattern = "mem", x = replacement) > 0) {
     mem_frame <- metric_frame
-    save(mem_frame, file = file.path("Rperform_Data", sub(pattern = pattern,
-                                                          replacement = replacement,
-                                                          x = basename(replace_string))))
+    save(mem_frame, file = file.path("Rperform_Data", sub(
+      pattern = pattern,
+      replacement = replacement,
+      x = basename(replace_string)
+    )))
   }
 }
 
 ##  -----------------------------------------------------------------------------------------
 
-.save_plots <- function(test_plot, test_name, metric, width = 1024, height = 768, units = "px") {
-  
+.save_plots <- function(test_plot, test_name, metric, width = 1024, height = 768, units = "px", sys_time = Sys.time()) {
+  # get date time in milliseconds
+  date_time <- as.integer(sys_time)
+
+  # prepare rperform directory for the plots
   if (metric == "time") {
-    if(!dir.exists(paths = "./Rperform_timeMetrics")) {
-      dir.create(path = "./Rperform_timeMetrics")
-    }
-    target_dir <- "Rperform_timeMetrics"
+    target_dir <- paste0("./rperform/results/Time_Metrics_", date_time)
+    prepare_dir(target_dir)
+  } else if (metric == "memory") {
+    target_dir <- paste0("./rperform/results/Memory_Metrics_", date_time)
+    prepare_dir(target_dir)
+  } else if (metric == "testMetrics") {
+    target_dir <- paste0("./rperform/results/Test_Metrics_", date_time)
+    prepare_dir(target_dir)
   }
-  else if (metric == "memory") {
-    if(!dir.exists(paths = "./Rperform_memoryMetrics")) {
-      dir.create(path = "./Rperform_memoryMetrics")
-    }
-    target_dir <- "Rperform_memoryMetrics"
-  }
-  else if (metric == "testMetrics") {
-    if(!dir.exists(paths = "./Rperform_testMetrics")) {
-      dir.create(path = "./Rperform_testMetrics")
-    }
-    target_dir <- "Rperform_testMetrics"
-  }
-  
+
   curr_name <- gsub(pattern = " ", replacement = "_", x = test_name)
   curr_name <- gsub(pattern = ".[rR]$", replacement = "", curr_name)
-  png.file <- file.path(target_dir, paste0("Test_", curr_name, ".png"))
-  grDevices::png(filename = png.file, width = width, height = height, units = units)
+  png_file <- file.path(target_dir, paste0("test_image", ".png"))
+  grDevices::png(filename = png_file, width = width, height = height, units = units)
   print(test_plot)
   grDevices::dev.off()
 }
