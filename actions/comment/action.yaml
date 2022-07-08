@@ -40,11 +40,11 @@ runs:
             var files = fs.readdirSync(dir);
             var allFiles = [];
             files.forEach(function (file) {
-              var path = dir + file;
+              var path = dir + "/" + file;
               if (fs.statSync(path).isDirectory()) {
                 allFiles = allFiles.concat(readFiles(path));
               } else {
-                allFiles.push(path);
+                allFiles.push(dir + file);
               }
             });
             // return an array of allFiles which contain "comment.txt" in the name
