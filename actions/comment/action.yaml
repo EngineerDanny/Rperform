@@ -40,7 +40,7 @@ runs:
             var files = fs.readdirSync(dir);
             var allFiles = [];
             files.forEach(function (file) {
-              var path = dir + "/" + file;
+              var path = dir + file;
               if (fs.statSync(path).isDirectory()) {
                 allFiles = allFiles.concat(readFiles(path));
               } else {
