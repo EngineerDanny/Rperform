@@ -36,25 +36,36 @@ runs:
       uses: actions/github-script@v6
       with:
         script: |
+          function readFiles(dir) {
+            var files = fs.readdirSync(dir);
+            var allFiles = [];
+            files.forEach(function (file) {
+              var path = dir + "/" + file;
+              if (fs.statSync(path).isDirectory()) {
+                allFiles = allFiles.concat(readFiles(path));
+              } else {
+                allFiles.push(path);
+              }
+            });
+            // return an array of allFiles which contain "comment.txt" in the name
+            return allFiles.filter(function (file) {
+              return file.indexOf("comment.txt") > -1;
+            });
+          }
+          
           var fs = require('fs');
           var pr_number = Number(fs.readFileSync('./PR_NO'));
-          var files = fs.readdirSync('./');
-          console.log("My Files ", files);
-          var pr_files = [];
-          files.forEach(function(file) {
-              if (file.indexOf('comment.txt') > -1) {
-                  pr_files.push(file);
-              }
-          });
-          console.log("My Pr files ", pr_files);
+          var pr_files = readFiles('./');
+          console.log("My PR Files ", pr_files);
+   
           for (var i = 0; i < pr_files.length; i++) {
               var body = fs.readFileSync(pr_files[i]).toString();
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: pr_number,
-                body: body
-              });
+              // await github.rest.issues.createComment({
+              //   owner: context.repo.owner,
+              //   repo: context.repo.repo,
+              //   issue_number: pr_number,
+              //   body: body
+              // });
           }
     - uses: actions/github-script@v5
       if: always()
