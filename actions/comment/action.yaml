@@ -55,7 +55,7 @@ runs:
           
           var fs = require('fs');
           var pr_number = Number(fs.readFileSync('./PR_NO'));
-          var pr_files = readFiles('./');
+          var pr_files = readFiles('.');
           console.log("My PR Files ", pr_files);
    
           for (var i = 0; i < pr_files.length; i++) {
