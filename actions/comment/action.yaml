@@ -44,7 +44,7 @@ runs:
               if (fs.statSync(path).isDirectory()) {
                 allFiles = allFiles.concat(readFiles(path));
               } else {
-                allFiles.push(dir + file);
+                allFiles.push(path);
               }
             });
             // return an array of allFiles which contain "comment.txt" in the name
