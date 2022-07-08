@@ -39,12 +39,14 @@ runs:
           var fs = require('fs');
           var pr_number = Number(fs.readFileSync('./PR_NO'));
           var files = fs.readdirSync('./');
+          console.log("My Files ", files);
           var pr_files = [];
           files.forEach(function(file) {
               if (file.indexOf('comment.txt') > -1) {
                   pr_files.push(file);
               }
           });
+          console.log("My Pr files ", pr_files);
           for (var i = 0; i < pr_files.length; i++) {
               var body = fs.readFileSync(pr_files[i]).toString();
               await github.rest.issues.createComment({
