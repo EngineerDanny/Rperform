@@ -876,7 +876,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
 
   # prepare rperform directory for the plots
   if (grepl(pattern = "time", x = replacement) > 0) {
-    target_dir <- paste0("./rperform/results/Time_Metrics_", date_time)
+    target_dir <- paste0("./rperform/results/TimeMetrics_", date_time)
     time_frame <- metric_frame
     prepare_dir(target_dir)
     # Save the metric data as csv file
@@ -886,7 +886,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
     )
     create_pr_comment(time_frame, "test_function", target_dir)
   } else if (grepl(pattern = "mem", x = replacement) > 0) {
-    target_dir <- paste0("./rperform/results/Memory_Metrics_", date_time)
+    target_dir <- paste0("./rperform/results/MemoryMetrics_", date_time)
     mem_frame <- metric_frame
     prepare_dir(target_dir)
     # Save the metric data as csv file
@@ -943,13 +943,13 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
 
   # prepare rperform directory for the plots
   if (metric == "time") {
-    target_dir <- paste0("./rperform/results/Time_Metrics_", date_time)
+    target_dir <- paste0("./rperform/results/TimeMetrics_", date_time)
     prepare_dir(target_dir)
   } else if (metric == "memory") {
-    target_dir <- paste0("./rperform/results/Memory_Metrics_", date_time)
+    target_dir <- paste0("./rperform/results/MemoryMetrics_", date_time)
     prepare_dir(target_dir)
   } else if (metric == "testMetrics") {
-    target_dir <- paste0("./rperform/results/Test_Metrics_", date_time)
+    target_dir <- paste0("./rperform/results/TestMetrics_", date_time)
     prepare_dir(target_dir)
   }
 
