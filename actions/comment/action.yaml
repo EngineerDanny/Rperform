@@ -71,13 +71,13 @@ runs:
           });
    
           for (var i = 0; i < commentFiles.length; i++) {
-              // var body = fs.readFileSync(commentFiles[i]).toString();
-              // await github.rest.issues.createComment({
-              //   owner: context.repo.owner,
-              //   repo: context.repo.repo,
-              //   issue_number: prNumber,
-              //   body: body
-              // });
+               var body = fs.readFileSync(commentFiles[i]).toString();
+               await github.rest.issues.createComment({
+                 owner: context.repo.owner,
+                 repo: context.repo.repo,
+                 issue_number: prNumber,
+                 body: body
+               });
           }
     - uses: actions/github-script@v5
       if: always()
