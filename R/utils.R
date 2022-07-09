@@ -104,6 +104,12 @@ create_pr_comment <- function(test_results, test_function,
   repo_owner <- sub(".*[github.com]/(.+)/.*", "\\1", remote_url)
   branch_name <- git2r::repository_head(repo)$name
 
+  print("Repo head")
+  print(git2r::repository_head(repo))
+
+  print("branch_name")
+  print(branch_name)
+
   image_url <- paste0(
     "![image](https://raw.githubusercontent.com/",
     repo_owner, "/", repo_name, "/", branch_name,
