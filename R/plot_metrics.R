@@ -81,15 +81,19 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
    # use git2r to get the current branch name
    repo <- git2r::repository("./")
    remote_url <- git2r::remote_url(repo)
+   git2r::branch_remote_name(repo)
    repo_name <- basename(remote_url)
    repo_owner <- sub(".*[github.com]/(.+)/.*", "\\1", remote_url)
-   branch_name <- git2r::repository_head(repo)$name
+
+   branches <- git2r::branches(repo)
+   branch <- branches[[1]]
+   branch_name <- branch$name
+
+
 
    print("Repo head")
    print(git2r::repository_head(repo))
 
-   print("branch_name")
-   print(branch_name)
 
    print("repo_name")
    print(repo_name)
@@ -97,9 +101,14 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
    print("repo_owner")
    print(repo_owner)
 
-   print("remote_url")
-   print(remote_url)
+   print("branch")
+   print(branch)
 
+   print("branches")
+   print(branches)
+
+   print("branch_name")
+   print(branch_name)
 
    
   if (metric == "time") {
