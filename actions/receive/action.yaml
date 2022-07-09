@@ -31,7 +31,6 @@ runs:
       run: |
         git config --local user.name "GitHub Actions"
         git config --local user.email "actions@github.com"
-        git checkout -b "$GITHUB_HEAD_REF"
       shell: bash
 
     # - name: Ensure base branch is fetched
@@ -89,7 +88,7 @@ runs:
       shell: Rscript {0}
     - name: Uploading Results
       run: |
-        git add rperform
+        git add .
         git commit -m "Benchmarking results"
         git push origin HEAD:$GITHUB_HEAD_REF        
         echo "Uploading results..."
