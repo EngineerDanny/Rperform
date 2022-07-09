@@ -65,31 +65,20 @@ runs:
             const split2 = split1[1].split("/");
             const scriptTime =  Number(split2[0]);
 
-            console.log("scriptTime");
-            console.log(scriptTime);
-
             if(scriptTime >= initTime){
               commentFiles.push(file);
             }
           });
-
-          console.log("Comment Files");
-          console.log(commentFiles);
-          
-          console.log("Init Time");
-          console.log(initTime);
-
-
    
-          // for (var i = 0; i < commentFiles.length; i++) {
-          //     var body = fs.readFileSync(commentFiles[i]).toString();
-          //     await github.rest.issues.createComment({
-          //       owner: context.repo.owner,
-          //       repo: context.repo.repo,
-          //       issue_number: prNumber,
-          //       body: body
-          //     });
-          // }
+          for (var i = 0; i < commentFiles.length; i++) {
+              var body = fs.readFileSync(commentFiles[i]).toString();
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: body
+              });
+          }
     - uses: actions/github-script@v5
       if: always()
       with:
