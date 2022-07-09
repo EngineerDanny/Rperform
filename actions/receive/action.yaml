@@ -88,7 +88,7 @@ runs:
       shell: Rscript {0}
     - name: Uploading Results
       run: |
-        git add .
+        git add rperform
         git commit -m "Benchmarking results"
         git push origin HEAD:$GITHUB_HEAD_REF        
         echo "Uploading results..."
