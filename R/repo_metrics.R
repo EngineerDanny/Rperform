@@ -329,17 +329,17 @@ time_compare <- function(test_path, num_commits = 10, save_data = FALSE) {
   
   test_results <- do.call(rbind, result_list)
   # If save_data is TRUE, save the data-frame to a file.
-  if (save_data) {
-    # Create a directory for storing PR comment
-    if (!dir.exists("./rperform/pr-comment")) {
-      dir.create(path = "./rperform/pr-comment")
-    }
-    # convert test_results to hmtl table
-    print(xtable::xtable(test_results),
-      type = "html",
-      file = "./rperform/pr-comment/results.txt"
-    )
-  }
+  # if (save_data) {
+  #   # Create a directory for storing PR comment
+  #   if (!dir.exists("./rperform/pr-comment")) {
+  #     dir.create(path = "./rperform/pr-comment")
+  #   }
+  #   # convert test_results to hmtl table
+  #   print(xtable::xtable(test_results),
+  #     type = "html",
+  #     file = "./rperform/pr-comment/results.txt"
+  #   )
+  # }
 
   test_results
 }
@@ -671,14 +671,14 @@ mem_compare <- function(test_path, num_commits = 10, save_data = FALSE) {
     # If save_data is TRUE, save the data-frame to a file.
   if (save_data) {
     # Create a directory for storing PR comment
-    if (!dir.exists("./rperform/pr-comment")) {
-      dir.create(path = "./rperform/pr-comment")
-    }
-    # convert test_results to hmtl table
-    print(xtable::xtable(test_results),
-      type = "html",
-      file = "./rperform/pr-comment/results.txt"
-    )
+    # if (!dir.exists("./rperform/pr-comment")) {
+    #   dir.create(path = "./rperform/pr-comment")
+    # }
+    # # convert test_results to hmtl table
+    # print(xtable::xtable(test_results),
+    #   type = "html",
+    #   file = "./rperform/pr-comment/results.txt"
+    # )
   }
 
   test_results  
