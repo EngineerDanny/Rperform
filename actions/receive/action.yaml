@@ -72,8 +72,8 @@ runs:
           return time_str;
         result-encoding: string  
 
-    - name: Get time
-      run: echo "${{steps.set-time.outputs.result}}"   
+    - name: Get current branch
+      run: git rev-parse --abbrev-ref HEAD  
       shell: bash  
 
     # - name: Checkout benchmarking repo
