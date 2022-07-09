@@ -74,7 +74,10 @@ branch_get_or_fail <- function(var) {
 #'
 #' @param target_dir A String.
 #'
-create_pr_comment <- function(test_results, test_function, target_dir) {
+#' @param folder_name A String.
+#'
+create_pr_comment <- function(test_results, test_function,
+                              target_dir, folder_name) {
   stopifnot(!is.null(test_results))
   typeof(test_results)
   suggested_pkgs <- c("ggplot2", "glue")
@@ -94,6 +97,19 @@ create_pr_comment <- function(test_results, test_function, target_dir) {
     ))
   }
 
+  # use git2r to get the current branch name
+  repo <- git2r::repository("./")
+  remote_url <- git2r::remote_url(repo)
+  repo_name <- basename(remote_url)
+  repo_owner <- sub(".*[github.com]/(.+)/.*", "\\1", remote_url)
+  branch_name <- git2r::repository_head(repo)$name
+
+  image_url <- paste0(
+    "![image](https://raw.githubusercontent.com/",
+    repo_owner, "/", repo_name, "/", branch_name,
+    "/rperform/results/", folder_name, "/test_image.png)"
+  )
+
   path_info <- file.path(target_dir, paste0("comment", ".txt"))
 
   default_header <- paste(
@@ -102,7 +118,9 @@ create_pr_comment <- function(test_results, test_function, target_dir) {
     test_function,
     "` function",
     " on this PR branch",
-    "\n"
+    "\n",
+    "<br/> <br/>",
+    image_url
   )
 
   default_footer <- paste(

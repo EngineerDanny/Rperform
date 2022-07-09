@@ -3,9 +3,11 @@
 
 glue::glue(
   "The table below represents the test results generated",
-  " after running the `",
+  " after running `",
   test_function,
   "` function",
   " on this PR branch",
-  "\n"
+  "\n",
+  "<br/> <br/>",
+  image_url
 )
