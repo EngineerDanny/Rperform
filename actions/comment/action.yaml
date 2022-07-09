@@ -64,6 +64,10 @@ runs:
             const split1 = file.split("_");
             const split2 = split1[1].split("/");
             const scriptTime =  Number(split2[0]);
+
+            console.log("scriptTime");
+            console.log(scriptTime);
+
             if(scriptTime > initTime){
               commentFiles.push(file);
             }
@@ -75,8 +79,6 @@ runs:
           console.log("Init Time");
           console.log(initTime);
 
-          console.log("scriptTime");
-          console.log(scriptTime);
 
    
           // for (var i = 0; i < commentFiles.length; i++) {
