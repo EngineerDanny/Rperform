@@ -81,7 +81,6 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
    # use git2r to get the current branch name
    repo <- git2r::repository("./")
    remote_url <- git2r::remote_url(repo)
-   git2r::branch_remote_name(repo)
    repo_name <- basename(remote_url)
    repo_owner <- sub(".*[github.com]/(.+)/.*", "\\1", remote_url)
 
