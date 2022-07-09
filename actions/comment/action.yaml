@@ -68,7 +68,7 @@ runs:
             console.log("scriptTime");
             console.log(scriptTime);
 
-            if(scriptTime > initTime){
+            if(scriptTime >= initTime){
               commentFiles.push(file);
             }
           });
