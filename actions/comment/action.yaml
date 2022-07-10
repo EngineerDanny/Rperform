@@ -8,6 +8,13 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Set-Up Git
+      run: |
+        git status
+        echo "$GITHUB_HEAD_REF"
+        echo "$GITHUB_BASE_REF"
+      shell: bash
+
     - name: "Download artifact"
       id: "download"
       uses: actions/github-script@v3.1.0
@@ -29,8 +36,10 @@ runs:
           });
           var fs = require('fs');
           fs.writeFileSync('${{github.workspace}}/pr.zip', Buffer.from(download.data));
+
     - run: unzip pr.zip
       shell: bash
+
     - name: "Comment on PR"
       id: "comment"
       uses: actions/github-script@v6

@@ -33,7 +33,7 @@ runs:
         git config --local user.email "actions@github.com"
       shell: bash
 
-    - name: Ensure base branch is fetched
+    - name: Fetch base branch
       run: |
         git checkout -b "$GITHUB_HEAD_REF" # this is current ref. This is required for naming.
         echo "$GITHUB_HEAD_REF"
@@ -78,14 +78,6 @@ runs:
     - name: Run benchmarks
       run: Rperform::run_script("rperform/script.R")
       shell: Rscript {0}
-
-    - name: Uploading Results
-      run: |
-        git add rperform
-        git commit -m "Benchmarking results"
-        git push -f origin HEAD:$GITHUB_HEAD_REF        
-        echo "Uploading results..."
-      shell: bash
 
     - name: Saves the PR number in an artifact
       shell: bash
