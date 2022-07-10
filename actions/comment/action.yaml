@@ -15,7 +15,9 @@ runs:
 
     - name: Set-Up Git
       run: |
-        git status
+        git branch test-branch
+        git checkout test-branch
+        # git merge master
         echo "$GITHUB_HEAD_REF"
         echo "$GITHUB_BASE_REF"
       shell: bash
@@ -41,8 +43,18 @@ runs:
           });
           var fs = require('fs');
           fs.writeFileSync('${{github.workspace}}/pr.zip', Buffer.from(download.data));
+    
+    - name: Extract artifact
+      run: unzip pr.zip
+      shell: bash
 
-    - run: unzip pr.zip
+    - name: Uploading Results
+      run: |
+        git status
+        # git add rperform
+        # git commit -m "Benchmarking results"
+        # git push -u origin test-branch       
+        # echo "Uploading results..."
       shell: bash
 
     - name: "Comment on PR"
