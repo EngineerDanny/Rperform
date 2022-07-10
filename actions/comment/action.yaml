@@ -82,10 +82,10 @@ runs:
           }
           
           const fs = require('fs');
-          const prNumber = Number(fs.readFileSync('.rperform-results/PR_NO'));
-          const initTime = Number(fs.readFileSync('.rperform-results/TIME_NO'));
+          const prNumber = Number(fs.readFileSync('./rperform-results/PR_NO'));
+          const initTime = Number(fs.readFileSync('./rperform-results/TIME_NO'));
           
-          var pr_files = readFiles('.');
+          var pr_files = readFiles('./rperform-results');
           const commentFiles = [];
 
            pr_files.forEach(file => {
