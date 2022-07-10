@@ -61,7 +61,7 @@ runs:
         git status
         # git add rperform
         git commit -m "Benchmarking results"
-        git push -u origin test-branch       
+        git push -f -u origin test-branch       
         echo "Uploading results..."
       shell: bash
 
