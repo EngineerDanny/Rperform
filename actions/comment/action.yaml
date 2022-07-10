@@ -50,6 +50,7 @@ runs:
 
     - name: Uploading Results
       run: |
+        ls
         git status
         # git add rperform
         # git commit -m "Benchmarking results"
