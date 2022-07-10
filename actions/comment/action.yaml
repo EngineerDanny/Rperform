@@ -51,6 +51,7 @@ runs:
     - name: Uploading Results
       run: |
         ls
+        git add -- rperform-results/ ':!rperform-results/PR_NO' ':!rperform-results/TIME_NO'
         git status
         # git add rperform
         # git commit -m "Benchmarking results"
@@ -81,8 +82,8 @@ runs:
           }
           
           const fs = require('fs');
-          const prNumber = Number(fs.readFileSync('./PR_NO'));
-          const initTime = Number(fs.readFileSync('./TIME_NO'));
+          const prNumber = Number(fs.readFileSync('.rperform-results/PR_NO'));
+          const initTime = Number(fs.readFileSync('.rperform-results/TIME_NO'));
           
           var pr_files = readFiles('.');
           const commentFiles = [];
