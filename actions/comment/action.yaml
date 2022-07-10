@@ -54,9 +54,9 @@ runs:
         git add -- rperform-results/ ':!rperform-results/PR_NO' ':!rperform-results/TIME_NO'
         git status
         # git add rperform
-        # git commit -m "Benchmarking results"
-        # git push -u origin test-branch       
-        # echo "Uploading results..."
+        git commit -m "Benchmarking results"
+        git push -u origin test-branch       
+        echo "Uploading results..."
       shell: bash
 
     - name: "Comment on PR"
