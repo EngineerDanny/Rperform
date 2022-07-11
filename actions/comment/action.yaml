@@ -64,6 +64,7 @@ runs:
       run: |
         git add -- rperform-results/ ':!rperform-results/PR_NO' ':!rperform-results/TIME_NO'
         git commit --allow-empty -m "Benchmarking results"
+        git push
         # git commit -m "Benchmarking results"
 
         # existed_in_remote=$(git ls-remote --heads origin test-branch)
