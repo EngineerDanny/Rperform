@@ -57,7 +57,7 @@ runs:
           fs.writeFileSync('${{github.workspace}}/pr.zip', Buffer.from(download.data));
     
     - name: Extract artifact
-      run: unzip -d rperform-results/ pr.zip
+      run: unzip -o -d rperform-results/ pr.zip
       shell: bash
 
     - name: Uploading Results
