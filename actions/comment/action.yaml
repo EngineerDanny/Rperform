@@ -26,8 +26,7 @@ runs:
           git checkout -b test-branch
           echo "Remote does not exist"
         else
-          git branch test-branch
-          git checkout test-branch
+          git checkout -b test-branch
           git pull origin test-branch
           echo "Remote exists"
         fi  
