@@ -152,17 +152,6 @@ create_pr_comment <- function(test_results, test_function,
   readLines(path_info)
 }
 
-
-#' @return
-#' Character vector of length one with the path to the pr comment.
-#' @export
-#' @seealso [pr_comment]
-path_pr_comment <- function() {
-  prepare_dir("./rperform/pr-comment")
-
-  fs::path(dir_rperform(), "pr-comment/results.txt")
-}
-
 #' @return
 #' Creates a new directory if it doesn't exist.
 #' @param new_dir A String.
