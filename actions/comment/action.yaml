@@ -26,6 +26,7 @@ runs:
         existed_in_remote=$(git ls-remote --heads origin test-branch)
         if [[ -z ${existed_in_remote} ]]; then
           git pull origin test-branch
+        fi   
       shell: bash
 
     - name: "Download artifact"
