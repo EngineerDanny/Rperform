@@ -28,7 +28,8 @@ runs:
           git switch --orphan test-branch
           echo "Remote does not exist"
         else
-          git checkout -b test-branch
+          # git checkout -b test-branch
+          git switch --orphan test-branch
           git pull origin test-branch
           echo "Remote exists"
         fi  
