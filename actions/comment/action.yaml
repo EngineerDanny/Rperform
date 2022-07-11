@@ -23,13 +23,14 @@ runs:
       run: |
         REMOTE_EXISTS=$(git ls-remote --heads origin test-branch)
         if [[ -z ${REMOTE_EXISTS} ]]; then
-          echo "Remote exists"
+          git checkout -b test-branch
+          echo "Remote does not exist"
         else
-          echo "Remote does not exists"
+          git branch test-branch
+          git checkout test-branch
+          git pull origin test-branch
+          echo "Remote exists"
         fi  
-        git branch test-branch
-        git checkout test-branch
-        git pull origin test-branch
       shell: bash
 
     - name: "Download artifact"
@@ -62,8 +63,14 @@ runs:
       run: |
         git add -- rperform-results/ ':!rperform-results/PR_NO' ':!rperform-results/TIME_NO'
         git commit --allow-empty -m "Benchmarking results"
-        git push -f origin test-branch
-   
+        REMOTE_EXISTS=$(git ls-remote --heads origin test-branch)
+        if [[ -z ${REMOTE_EXISTS} ]]; then
+          git push -u origin test-branch
+          echo "Remote does not exist"
+        else
+          git push -f origin test-branch
+          echo "Remote exists"
+        fi  
       shell: bash
 
     - name: "Comment on PR"
