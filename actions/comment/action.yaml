@@ -21,6 +21,12 @@ runs:
 
     - name: Set-Up Git
       run: |
+        existed_in_remote=$(git ls-remote --heads origin test-branch)
+        if [[ -z ${existed_in_remote} ]]; then
+          echo "Remote exists"
+        else
+          echo "Remote does not exists"
+        fi  
         git branch test-branch
         git checkout test-branch
         git pull origin test-branch
@@ -57,13 +63,7 @@ runs:
         git add -- rperform-results/ ':!rperform-results/PR_NO' ':!rperform-results/TIME_NO'
         git commit --allow-empty -m "Benchmarking results"
         git push -f origin test-branch
-
-        existed_in_remote=$(git ls-remote --heads origin test-branch)
-        if [[ -z ${existed_in_remote} ]]; then
-        echo "Remote exists"
-        else
-        echo "Remote does not exists"
-        fi     
+   
       shell: bash
 
     - name: "Comment on PR"
