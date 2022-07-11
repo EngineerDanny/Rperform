@@ -11,9 +11,10 @@ utils::globalVariables(c("metric_val", "test_name", "mid_val", "capture.output")
 #' Given a test-file path, plot the metrics of entire file and individual
 #' testthat blocks against the commit message summaries of the specified number
 #' of commits in the current git repository. If the parameter save_data is set
-#' to true, it also stores the corresponding data-frames in an RData file in a
-#' folder 'Rperform_Data' in the current directory.The metrics plotted are in
-#' accordance with those specified using the parameter metric.
+#' to true, it also stores the corresponding data-frames in a csv file in a
+#' folder 'rperform/{TEST_NAME}' in the current directory.
+#' The metrics plotted are in accordance with those
+#' specified using the parameter metric.
 #'
 #' @param test_path File-path of the test-file which is to be used for run-time
 #'   comparisons.
@@ -23,10 +24,10 @@ utils::globalVariables(c("metric_val", "test_name", "mid_val", "capture.output")
 #' @param num_commits Number of commits (versions) against which the file is to
 #'   be tested, with default being 5.
 #' @param save_data If set to TRUE, the data frame containing the metrics
-#'   information is stored in the 'Rperform_Data' directory in the root of the
-#'   repo. (default set to FALSE)
+#'   information is stored in the 'rperform/{TEST_NAME}' directory 
+#'   in the root of the repo. (default set to FALSE)
 #' @param save_plots If set to TRUE, the plots generated are stored in the
-#'   'Rperform_plots' directory in the root of the repo rather than being
+#'   'rperform/{TEST_NAME}' directory in the root of the repo rather than being
 #'   printed. (default set to TRUE)
 #' @param interactive If set to TRUE, the plots generated are interactive. The
 #'   resulting plot is rendered in the default browser.
@@ -460,7 +461,7 @@ plot_webpage <- function(test_directory = "tests/testthat", metric = "testMetric
 #' @param save_data If set to TRUE, the metrics data is saved in a folder 'Rperform_Data'
 #'   in the current directory.
 #' @param save_plots If set to TRUE, the plots generated are stored in the
-#'   'Rperform_plots' directory in the root of the repo rather than being
+#'   'rperform/{TEST_NAME}' directory in the root of the repo rather than being
 #'   printed.
 #'
 #' @examples
@@ -556,10 +557,10 @@ plot_directory <- function(test_directory, metric = "testMetrics", num_commits =
 #'    This is supposedly the branch into which branch1 is to be merged and its
 #'    default value is set to 'master'.
 #' @param save_data If set to TRUE, the data frame containing the metrics
-#'   information is stored in the 'Rperform_Data' directory in the root of the
-#'   repo. (default set to FALSE)
+#'   information is stored in the 'rperform/{TEST_NAME}' directory 
+#'   in the root of the repo. (default set to FALSE)
 #' @param save_plots If set to TRUE, the plots generated are stored in the
-#'   'Rperform_plots' directory in the root of the repo rather than being
+#'   'rperform/{TEST_NAME}' directory in the root of the repo rather than being
 #'   printed. (default set to TRUE)
 #'   
 #' @section NOTE:
@@ -898,42 +899,6 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
       file = csv_file
     )
     create_pr_comment(mem_frame, "test_function", target_dir, folder_name)
-  }
-
-
-
-
-
-  # Create a directory for storing the metric data
-  if (!dir.exists("./Rperform_Data")) {
-    dir.create(path = "./Rperform_Data")
-  }
-
-  # Create a directory for storing PR comment
-  # if (!dir.exists("./rperform/pr-comment")) {
-  #   dir.create(path = "./rperform/pr-comment")
-  # }
-  # # convert metric_frame to hmtl table
-  # print(xtable::xtable(metric_frame),
-  #   type = "html",
-  #   file = "./rperform/pr-comment/results.txt"
-  # )
-
-
-  if (grepl(pattern = "time", x = replacement) > 0) {
-    time_frame <- metric_frame
-    save(time_frame, file = file.path("Rperform_Data", sub(
-      pattern = pattern,
-      replacement = replacement,
-      x = basename(replace_string)
-    )))
-  } else if (grepl(pattern = "mem", x = replacement) > 0) {
-    mem_frame <- metric_frame
-    save(mem_frame, file = file.path("Rperform_Data", sub(
-      pattern = pattern,
-      replacement = replacement,
-      x = basename(replace_string)
-    )))
   }
 }
 
