@@ -63,7 +63,7 @@ runs:
     - name: Uploading Results
       run: |
         git add -- rperform-results/ ':!rperform-results/PR_NO' ':!rperform-results/TIME_NO'
-        git commit -m "Benchmarking results"
+        # git commit -m "Benchmarking results"
 
         # existed_in_remote=$(git ls-remote --heads origin test-branch)
         # if [[ -z ${existed_in_remote} ]]; then
