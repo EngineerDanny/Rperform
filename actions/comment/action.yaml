@@ -21,8 +21,8 @@ runs:
 
     - name: Set-Up Git
       run: |
-        existed_in_remote=$(git ls-remote --heads origin test-branch)
-        if [[ -z ${existed_in_remote} ]]; then
+        REMOTE_EXISTS=$(git ls-remote --heads origin test-branch)
+        if [[ -z ${REMOTE_EXISTS} ]]; then
           echo "Remote exists"
         else
           echo "Remote does not exists"
