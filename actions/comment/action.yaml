@@ -23,7 +23,8 @@ runs:
       run: |
         REMOTE_EXISTS=$(git ls-remote --heads origin test-branch)
         if [[ -z ${REMOTE_EXISTS} ]]; then
-          git checkout -b test-branch
+          # git checkout -b test-branch
+          git switch --orphan test-branch
           echo "Remote does not exist"
         else
           git checkout -b test-branch
