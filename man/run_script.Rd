@@ -12,3 +12,6 @@ run_script(path = "inst/script.R")
 \description{
 Runs the Rperform script.
 }
+\examples{
+run_script("inst/script.R")
+}

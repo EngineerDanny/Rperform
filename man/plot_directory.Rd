@@ -4,8 +4,13 @@
 \alias{plot_directory}
 \title{Plot metrics across versions for all files in a given directory.}
 \usage{
-plot_directory(test_directory, metric = "testMetrics", num_commits = 5,
-  save_data = FALSE, save_plots = TRUE)
+plot_directory(
+  test_directory,
+  metric = "testMetrics",
+  num_commits = 5,
+  save_data = FALSE,
+  save_plots = TRUE
+)
 }
 \arguments{
 \item{test_directory}{Directory containing the test-files which are to be used.}
@@ -21,7 +26,7 @@ be tested, with default being 5.}
 in the current directory.}
 
 \item{save_plots}{If set to TRUE, the plots generated are stored in the
-'Rperform_plots' directory in the root of the repo rather than being
+'rperform/{TEST_NAME}' directory in the root of the repo rather than being
 printed.}
 }
 \description{
@@ -34,6 +39,7 @@ of commits in the current git repository.
   Library assumes the current directory to be the root directory of the
   package being tested.
 }
+
 \examples{
 
 \dontrun{
@@ -62,4 +68,3 @@ plot_directory(d_path, metric = "testMetrics", num_commits = 5, save_data = F,
 }
 
 }
-

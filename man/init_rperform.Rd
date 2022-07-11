@@ -17,3 +17,6 @@ Returns a (temporarily) invisible copy of an object.
 Initializes Rperform by generating some files and adding them to the
 rperform directory. It also makes Github Workflow Set-Up simpler.
 }
+\examples{
+init_rperform()
+}
