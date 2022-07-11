@@ -17,6 +17,7 @@ runs:
       run: |
         git config --local user.name "GitHub Actions"
         git config --local user.email "actions@github.com"
+        git config pull.rebase false
       shell: bash
 
     - name: Set-Up Git
