@@ -23,10 +23,10 @@ runs:
       run: |
         git branch test-branch
         git checkout test-branch
-        existed_in_remote=$(git ls-remote --heads origin test-branch)
-        if [[ -z ${existed_in_remote} ]]; then
-          git pull origin test-branch
-        fi   
+        git pull origin test-branch
+        # existed_in_remote=$(git ls-remote --heads origin test-branch)
+        # if [[ -z ${existed_in_remote} ]]; then
+        # fi   
       shell: bash
 
     - name: "Download artifact"
