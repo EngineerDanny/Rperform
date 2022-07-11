@@ -22,15 +22,15 @@ runs:
 
     - name: Set-Up Git
       run: |
-        REMOTE_EXISTS=$(git ls-remote --heads origin test-branch)
+        REMOTE_EXISTS=$(git ls-remote --heads origin rperform-branch)
         if [[ -z ${REMOTE_EXISTS} ]]; then
-          # git checkout -b test-branch
-          git switch --orphan test-branch
+          # git checkout -b rperform-branch
+          git switch --orphan rperform-branch
           echo "Remote does not exist"
         else
-          # git checkout -b test-branch
-          git switch --orphan test-branch
-          git pull origin test-branch
+          # git checkout -b rperform-branch
+          git switch --orphan rperform-branch
+          git pull origin rperform-branch
           echo "Remote exists"
         fi  
       shell: bash
@@ -65,12 +65,12 @@ runs:
       run: |
         git add -- rperform-results/ ':!rperform-results/PR_NO' ':!rperform-results/TIME_NO'
         git commit --allow-empty -m "Benchmarking results"
-        REMOTE_EXISTS=$(git ls-remote --heads origin test-branch)
+        REMOTE_EXISTS=$(git ls-remote --heads origin rperform-branch)
         if [[ -z ${REMOTE_EXISTS} ]]; then
-          git push -u origin test-branch
+          git push -u origin rperform-branch
           echo "Remote does not exist"
         else
-          git push -f origin test-branch
+          git push -f origin rperform-branch
           echo "Remote exists"
         fi  
       shell: bash

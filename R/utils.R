@@ -102,12 +102,11 @@ create_pr_comment <- function(test_results, test_function,
   remote_url <- git2r::remote_url(repo)
   repo_name <- basename(remote_url)
   repo_owner <- sub(".*[github.com]/(.+)/.*", "\\1", remote_url)
-  branch_name <- git2r::repository_head(repo)$name
 
   image_url <- paste0(
     "![image](https://raw.githubusercontent.com/",
-    repo_owner, "/", repo_name, "/", branch_name,
-    "/rperform/results/", folder_name, "/test_image.png)"
+    repo_owner, "/", repo_name,
+    "/rperform-branch/rperform-results/", folder_name, "/test_image.png)"
   )
 
   path_info <- file.path(target_dir, paste0("comment", ".txt"))
