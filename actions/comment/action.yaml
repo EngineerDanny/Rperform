@@ -24,14 +24,6 @@ runs:
         git branch test-branch
         git checkout test-branch
         git pull origin test-branch
-        if [ `git branch --list test-branch` ]; then
-          echo "Branch name test-branch already exists"
-        else
-          echo "Branch name test-branch doesnot exist"
-        fi
-        # existed_in_remote=$(git ls-remote --heads origin test-branch)
-        # if [[ -z ${existed_in_remote} ]]; then
-        # fi   
       shell: bash
 
     - name: "Download artifact"
