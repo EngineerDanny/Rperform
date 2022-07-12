@@ -134,15 +134,6 @@ create_pr_comment <- function(test_results, test_function,
     file = path_info
   )
 
-  ## write the table section
-  # m_table <- print(xtable::xtable(test_results),
-  #   type = "html"
-  # )
-  # cat(m_table,
-  #   file = path_info,
-  #   append = TRUE
-  # )
-
   ## write the footer section
   cat(get_comment_text("footer", default_footer),
     fill = TRUE,
