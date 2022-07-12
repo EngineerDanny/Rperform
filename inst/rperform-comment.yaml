@@ -1,4 +1,4 @@
-name: Continuous Benchmarks (Comment)
+name: Rperform Benchmarks (Comment)
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref }}
@@ -6,7 +6,7 @@ concurrency:
 
 on:
   workflow_run:
-    workflows: ["Continuous Benchmarks (Receive)"]
+    workflows: ["Rperform Benchmarks (Receive)"]
     types:
       - completed
 
