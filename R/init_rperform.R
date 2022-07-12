@@ -101,20 +101,11 @@ copy_if_not_exists <- function(path, new_path, overwrite = FALSE) {
 #' 
 #' @param path A String.
 #' 
-#' @examples run_script("inst/script.R")
-run_script <- function(path = "inst/script.R") {
-  # force(branch)
-  # rlang::with_interactive(
-  #   activate(branch, branch_get_or_fail("GITHUB_BASE_REF")), TRUE
-  # )
-
-  # temp_file <- fs::file_temp()
-  # fs::file_copy(path, temp_file)
-
-  # cli::cli_alert_success(paste0(
-  #   "Copied Rperform script to tempdir to prevent branch checkouts to effect",
-  #   " the script."
-  # ))
+#' @examples
+#' \dontrun{
+#' run_script("inst/script.R")
+#' } 
+run_script <- function(path = "rperform/script.R") {
 
   source(path, max.deparse.length = Inf, local = TRUE)
 }

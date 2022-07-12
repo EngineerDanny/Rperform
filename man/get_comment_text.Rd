@@ -6,6 +6,13 @@
 \usage{
 get_comment_text(part = c("footer", "header"), default, env = parent.frame())
 }
+\arguments{
+\item{part}{The section of the comment to modify.}
+
+\item{default}{The default text to use if the file does not exist.}
+
+\item{env}{The environment variable to use.}
+}
 \description{
 The files `rperform/header.R` and `rperform/footer.R` allow you to modify
 the PR comment. You can use github markdown syntax to format the text.

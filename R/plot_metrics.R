@@ -4,7 +4,8 @@
 ## package.
 ## Sample NOTE:
 ## plot_bmemory: no visible binding for global variable ‘metric_val’
-utils::globalVariables(c("metric_val", "test_name", "mid_val", "capture.output"))
+utils::globalVariables(c("metric_val", "test_name", "mid_val", 
+"capture.output", "write.csv2"))
 
 #' Plot test-file metrics across versions.
 #'

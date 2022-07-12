@@ -4,7 +4,7 @@
 \alias{run_script}
 \title{Runs the Rperform script.}
 \usage{
-run_script(path = "inst/script.R")
+run_script(path = "rperform/script.R")
 }
 \arguments{
 \item{path}{A String.}
@@ -13,5 +13,7 @@ run_script(path = "inst/script.R")
 Runs the Rperform script.
 }
 \examples{
+\dontrun{
 run_script("inst/script.R")
+} 
 }

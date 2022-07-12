@@ -1,15 +1,6 @@
 name: "receive"
 description: "Action to run Rperform benchmarks and upload the results."
 inputs:
-  # benchmarking_repo:
-  #   description: "Additional repository required for benchmarking."
-  #   required: false
-  # benchmarking_ref:
-  #   description: "Ref of benchmarking repository."
-  #   required: false
-  # benchmarking_path:
-  #   description: "Path to check out benchmarking repository to."
-  #   required: false
   cache-version:
     description: "Integer to use as cache version. Increment to use new cache."
     required: true

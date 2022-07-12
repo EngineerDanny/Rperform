@@ -37,6 +37,7 @@ The data-frame consists of the following columns:
   Function assumes the current directory to be the root directory of the
   package being tested.
 }
+
 \examples{
 
 \dontrun{
@@ -51,4 +52,3 @@ library(Rperform)
 time_branch(test_path = t_path, branch_name = "helper", num_commits = 10)
 }
 }
-

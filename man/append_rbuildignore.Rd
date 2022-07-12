@@ -7,14 +7,13 @@
 append_rbuildignore(dir)
 }
 \arguments{
-\item{dir}{A String.}
-}
-\value{
-A cli object
+\item{dir}{The directory append Rbuildignore to}
 }
 \description{
 Appends dir to Rbuildignore
 }
 \examples{
+\dontrun{
 append_rbuildignore("Rperform")
+}
 }

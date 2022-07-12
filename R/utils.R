@@ -10,11 +10,12 @@ path_rperform_script <- function() {
 
 #' Appends dir to Rbuildignore
 #'
-#' @param dir A String.
+#' @param dir The directory append Rbuildignore to
 #'
-#' @return A cli object
-#'
-#' @examples append_rbuildignore("Rperform")
+#' @examples 
+#' \dontrun{
+#' append_rbuildignore("Rperform")
+#' }
 append_rbuildignore <- function(dir) {
   ignore <- ".Rbuildignore"
   dir_str <- glue::glue("^{dir}$")
@@ -152,9 +153,8 @@ create_pr_comment <- function(test_results, test_function,
   readLines(path_info)
 }
 
-#' @return
 #' Creates a new directory if it doesn't exist.
-#' @param new_dir A String.
+#' @param new_dir The directory to create.
 #'
 #' @export
 prepare_dir <- function(new_dir) {
@@ -169,9 +169,14 @@ prepare_dir <- function(new_dir) {
 #'
 #' The files `rperform/header.R` and `rperform/footer.R` allow you to modify
 #' the PR comment. You can use github markdown syntax to format the text.
+#' @param part The section of the comment to modify.
+#' @param default The default text to use if the file does not exist.
+#' @param env The environment variable to use.
 #'
-#' @name get_comment_text
-
+#' @return
+#' @export
+#'
+#' @examples
 get_comment_text <- function(part = c("footer", "header"), default,
                              env = parent.frame()) {
   part <- match.arg(part)

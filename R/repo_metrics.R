@@ -284,7 +284,7 @@ time_commit <- function(test_path, test_commit) {
 #' 
 #' # Pass the parameters and obtain the run-time details against 10 commits
 #' library(Rperform)
-#' time_compare(test_path = t_path, num_commits = 10)
+#' time_compare(test_path = t_path, num_commits = 10, save_data = FALSE)
 #' }
 #' 
 #' @section Value:
@@ -604,7 +604,7 @@ get_mem <- function(test_path, commit_num = 1) {
 #' 
 #' # Pass the parameters and obtain the run-time details
 #' library(Rperform)
-#' mem_compare(t_path, 10)
+#' mem_compare(t_path, 10, FALSE)
 #' }
 #' 
 #' @section Value:

@@ -53,6 +53,7 @@ The second member is a data-frame and consists of the following columns:
   the repositories being tested. That means both the repositories should be
   inside the same directory.
 }
+
 \examples{
 
 \dontrun{
@@ -72,4 +73,3 @@ compare_dir(d_path1, d_path2, t_path, metric = "time")
 }
 
 }
-

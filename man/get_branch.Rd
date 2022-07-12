@@ -16,4 +16,3 @@ parameter (default being the current repository).
 \seealso{
 \code{\link[git2r]{repository}}
 }
-

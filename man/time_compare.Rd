@@ -4,7 +4,7 @@
 \alias{time_compare}
 \title{Run-time across versions.}
 \usage{
-time_compare(test_path, num_commits = 10)
+time_compare(test_path, num_commits = 10, save_data = FALSE)
 }
 \arguments{
 \item{test_path}{File-path of the test-file which is to be used for run-time
@@ -12,6 +12,9 @@ comparisons.}
 
 \item{num_commits}{Number of commits (versions) against which the file is to
 be tested, with default being 10.}
+
+\item{save_data}{Boolean value indicating whether the data-frame should be
+saved to a file. Default is FALSE.}
 }
 \description{
 Given a test-file path, checks its run-time against the specified number of commits 
@@ -37,6 +40,7 @@ The data-frame consists of the following columns:
   Function assumes the current directory to be the root directory of the
   package being tested.
 }
+
 \examples{
 
 \dontrun{
@@ -50,8 +54,7 @@ t_path <- "Path/to/file"
 
 # Pass the parameters and obtain the run-time details against 10 commits
 library(Rperform)
-time_compare(test_path = t_path, num_commits = 10)
+time_compare(test_path = t_path, num_commits = 10, save_data = FALSE)
 }
 
 }
-
