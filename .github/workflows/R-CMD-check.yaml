@@ -17,4 +17,4 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2             
       - uses: r-lib/actions/check-r-package@v2
       - name: "Test Completion"
-        run: echo "All GitHub CI tests have passed"
+        run: echo "R-CMD-check passed"

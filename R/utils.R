@@ -12,7 +12,7 @@ path_rperform_script <- function() {
 #'
 #' @param dir The directory append Rbuildignore to
 #'
-#' @examples 
+#' @examples
 #' \dontrun{
 #' append_rbuildignore("Rperform")
 #' }
@@ -110,16 +110,24 @@ create_pr_comment <- function(test_results, test_function,
     "/rperform-branch/rperform-results/", folder_name, "/test_image.png)"
   )
 
+  csv_url <- paste0(
+    "[here](https://raw.githubusercontent.com/",
+    repo_owner, "/", repo_name,
+    "/rperform-branch/rperform-results/", folder_name, "/test_data.csv)"
+  )
+
   path_info <- file.path(target_dir, paste0("comment", ".txt"))
 
   default_header <- paste(
-    "The table below represents the test results generated",
+    "The image below represents the test results generated",
     " after running `",
     test_function,
     "` function",
-    " on this PR branch",
+    " on this PR branch.",
+    "Check out the test results data set in csv ",
+    csv_url,
     "\n",
-    "<br/> <br/>",
+    "<br/>",
     image_url
   )
 
