@@ -954,3 +954,4 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
   
   extremes_frame
 }
+

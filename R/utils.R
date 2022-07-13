@@ -164,10 +164,7 @@ prepare_dir <- function(new_dir) {
 #' @param default The default text to use if the file does not exist.
 #' @param env The environment variable to use.
 #'
-#' @return
 #' @export
-#'
-#' @examples
 get_comment_text <- function(part = c("footer", "header"), default,
                              env = parent.frame()) {
   part <- match.arg(part)
