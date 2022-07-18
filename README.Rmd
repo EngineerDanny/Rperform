@@ -8,20 +8,20 @@ output: github_document
 
 [![R-CMD-check](https://github.com/EngineerDanny/Rperform/workflows/R-CMD-check/badge.svg)](https://github.com/EngineerDanny/Rperform/actions)
 
-`Rperform` is a package that allows R developers to track quantitative performance metrics of their code. **Rperform only supports projects utilizing projects that use `testthat` package for testing.**  It focuses on providing changes in a package’s performance metrics, related to `runtime` and `memory`, over different git versions and across git branches. It can prove to be particularly useful while measuring the possible changes which can be introduced by a pull request (PR).
+[Rperform](https://github.com/analyticalmonk/Rperform) is a package that allows R developers to track quantitative performance metrics of their code. **Rperform only supports projects utilizing projects that use [testthat](https://github.com/r-lib/testthat) package for testing.**  It focuses on providing changes in a package’s performance metrics, related to `runtime` and `memory`, over different git versions and across git branches. It can prove to be particularly useful while measuring the possible changes which can be introduced by a pull request (PR).
 
-- Rperform can be integrated with Github Actions CI for developers to build and test their code from GitHub. Performance testing can be done anytime there is a PR. This is a great way to measure the performance of a PR before merging it.
+- Rperform can be integrated with [Github Actions CI](https://github.com/features/actions) for developers to build and test their code from GitHub. Performance testing can be done anytime there is a PR. This is a great way to measure the performance of a PR before merging it.
 
-- Rperform can be used with Travis-CI to do performance testing during Travis builds by making changes to the repo’s `.travis.yml` file. ***For integrating Rperform with your travis build, check out the instructions provided on the [Rperform Wiki](https://github.com/analyticalmonk/Rperform/wiki/Integrating-Rperform-with-Travis-CI)***.
+- Rperform can be used with [Travis-CI](https://www.travis-ci.com) to do performance testing during Travis builds by making changes to the repo’s `.travis.yml` file. For integrating Rperform with your travis build, check out the instructions provided on the [Rperform Wiki](https://github.com/analyticalmonk/Rperform/wiki/Integrating-Rperform-with-Travis-CI).
 
 
 
 
 ***For more information, tutorials and related blog posts, go through the [Rperform wiki](https://github.com/analyticalmonk/Rperform/wiki/Integrating-Rperform-with-Travis-CI).***
 
-\*The project was initiated as a part of the [Google Summer of Code 2015](https://github.com/rstats-gsoc/gsoc2015/wiki/Test-timings-on-Travis) program and accepted into [Google Summer of Code 2016](https://github.com/rstats-gsoc/gsoc2016/wiki/Rperform:-Performance-analysis-of-R-package-code) program.
+*The project was initiated as a part of the [Google Summer of Code 2015](https://github.com/rstats-gsoc/gsoc2015/wiki/Test-timings-on-Travis) program and accepted into [Google Summer of Code 2016](https://github.com/rstats-gsoc/gsoc2016/wiki/Rperform:-Performance-analysis-of-R-package-code) program.
 
-\*The project has also been accepted into the [Google Summer of Code 2022](https://github.com/rstats-gsoc/gsoc2022/wiki/Rperform) program with [Toby Dylan Hocking](https://github.com/tdhock), [Akash Tandon](https://github.com/analyticalmonk) and [Randy Lai](mailto:randy.cs.lai@gmail.com) as the mentors.
+*The project has also been accepted into the [Google Summer of Code 2022](https://github.com/rstats-gsoc/gsoc2022/wiki/Rperform) program with [Toby Dylan Hocking](https://github.com/tdhock), [Akash Tandon](https://github.com/analyticalmonk) and [Randy Lai](mailto:randy.cs.lai@gmail.com) as the mentors.
 
 # Installation
 ``` r
@@ -35,17 +35,23 @@ output: github_document
 
 *For detailed information regarding Rperform’s plotting functions, check out the [**Wiki**](https://github.com/analyticalmonk/Rperform/wiki/Plotting-package-metrics-with-Rperform).*
 
-**IMPORTANT**: The Rperform package requires you to set the current directory to the concerned git repository that you want to run the test on before using the functions. 
+**IMPORTANT :** The Rperform package requires you to set the current directory to the concerned git repository that you want to run the test on before using the functions. 
 
 To stick with your current directory, you can use :
 
 ``` r
-> setwd(dir = ".")
+setwd(dir = ".")
 ```
 To use a custom directory :
 ``` r
-> setwd(dir = "Path/to/repo")
+setwd(dir = "/Path/to/repo")
 ```
+
+To print the path of your current directory, use :
+``` r
+getwd()
+```
+
 
 -   The following example illustrates the use of the `Rperform::plot_metrics()` function on the git repository of the package [stringr](https://github.com/EngineerDanny/stringr).
 
@@ -126,8 +132,9 @@ To use a custom directory :
 13.6       test-join.r     leak_mb      pass      0.148 Can now use CRA 2015-01-08 14:09:43
 ```
 
-## Github Continuous Integration with Rperform
-What makes Rperform great is its flexibility. To set-up Rperform for your GitHub CI worflow, initialize Rperform with the command :
+## Advanced Usage
+### Setting up Github CI with Rperform
+Rperform has great flexibility and usability. It internally supports automating the tests of your code on Github and creating comments to display the results. To set-up Rperform for your GitHub CI worflow, initialize Rperform with the command :
 
 ```r
 Rperform:init_rperform()
@@ -149,3 +156,8 @@ With only these two functions, you can run four different types of tests:
 After this set-up, anytime there is a Pull Request in the repository, the workflow will be triggered and the tests will be run. The results will be commented out by Github Bot in the PR.
 ### Customising the PR comment
 There are the `header.R` and `footer.R` files inside the `rperform` directory which you can edit to customize the PR comment. The `glue` package is used to format and interpolate the strings so as to join the different sections of the comment. It must be noted that since any comment text is rendered in Markdown format, you must use the markdown syntax to edit the comment. 
+
+### Results
+Below is an example of the auto comment that is generated when the workflow is triggered by a PR.
+![image](./images/Rperform_comment.png)
+
