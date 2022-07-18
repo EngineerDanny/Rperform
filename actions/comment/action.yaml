@@ -1,0 +1,151 @@
+name: "comment"
+description: "Action to comment Rperform results on the appropriate PR. Needs read/write access."
+inputs:
+  GITHUB_TOKEN:
+    description: "The GITHUB_TOKEN secret."
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Set up git user
+      run: |
+        git config --local user.name "GitHub Actions"
+        git config --local user.email "actions@github.com"
+        git config pull.rebase false
+      shell: bash
+
+    - name: Set-Up Git
+      run: |
+        REMOTE_EXISTS=$(git ls-remote --heads origin rperform-branch)
+        if [[ -z ${REMOTE_EXISTS} ]]; then
+          # git checkout -b rperform-branch
+          git switch --orphan rperform-branch
+          echo "Remote does not exist"
+        else
+          # git checkout -b rperform-branch
+          git switch --orphan rperform-branch
+          git pull origin rperform-branch
+          echo "Remote exists"
+        fi  
+      shell: bash
+
+    - name: "Download artifact"
+      id: "download"
+      uses: actions/github-script@v3.1.0
+      with:
+        script: |
+          var artifacts = await github.actions.listWorkflowRunArtifacts({
+             owner: context.repo.owner,
+             repo: context.repo.repo,
+             run_id: ${{github.event.workflow_run.id }},
+          });
+          var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
+            return artifact.name == "pr"
+          })[0];
+          var download = await github.actions.downloadArtifact({
+             owner: context.repo.owner,
+             repo: context.repo.repo,
+             artifact_id: matchArtifact.id,
+             archive_format: 'zip',
+          });
+          var fs = require('fs');
+          fs.writeFileSync('${{github.workspace}}/pr.zip', Buffer.from(download.data));
+    
+    - name: Extract artifact
+      run: unzip -o -d rperform-results/ pr.zip
+      shell: bash
+
+    - name: Uploading Results
+      run: |
+        git add -- rperform-results/ ':!rperform-results/PR_NO' ':!rperform-results/TIME_NO'
+        git commit --allow-empty -m "Benchmarking results"
+        REMOTE_EXISTS=$(git ls-remote --heads origin rperform-branch)
+        if [[ -z ${REMOTE_EXISTS} ]]; then
+          git push -u origin rperform-branch
+          echo "Remote does not exist"
+        else
+          git push -f origin rperform-branch
+          echo "Remote exists"
+        fi  
+      shell: bash
+
+    - name: "Comment on PR"
+      id: "comment"
+      uses: actions/github-script@v6
+      with:
+        script: |
+          function readFiles(dir) {
+            var files = fs.readdirSync(dir);
+            var allFiles = [];
+            files.forEach(function (file) {
+              var path = dir + "/" + file;
+              if (fs.statSync(path).isDirectory()) {
+                allFiles = allFiles.concat(readFiles(path));
+              } else {
+                allFiles.push(path);
+              }
+            });
+            // return an array of allFiles which contain "comment.txt" in the name
+            return allFiles.filter(function (file) {
+              return file.indexOf("comment.txt") > -1;
+            });
+          }
+          
+          const fs = require('fs');
+          const prNumber = Number(fs.readFileSync('./rperform-results/PR_NO'));
+          const initTime = Number(fs.readFileSync('./rperform-results/TIME_NO'));
+          
+          var pr_files = readFiles('./rperform-results');
+          const commentFiles = [];
+
+           pr_files.forEach(file => {
+            const split1 = file.split("_");
+            const split2 = split1[1].split("/");
+            const scriptTime =  Number(split2[0]);
+
+            if(scriptTime >= initTime){
+              commentFiles.push(file);
+            }
+          });
+   
+          for (var i = 0; i < commentFiles.length; i++) {
+               var body = fs.readFileSync(commentFiles[i]).toString();
+               await github.rest.issues.createComment({
+                 owner: context.repo.owner,
+                 repo: context.repo.repo,
+                 issue_number: prNumber,
+                 body: body
+               });
+          }
+    - uses: actions/github-script@v5
+      if: always()
+      with:
+        script: |
+          let url = '${{ github.event.workflow_run.html_url }}'
+          let any_failed = ${{ steps.comment.outcome == 'failure' || steps.download.outcome == 'failure' }}
+          let state = 'success'
+          let description = 'Commenting succeeded!'
+
+          if(${{ github.event.workflow_run.conclusion == 'failure'}} || any_failed) {
+            state = 'failure'
+            description = 'Commenting failed!'
+            if(any_failed) {
+              url = "https://github.com/${{github.repository}}/actions/runs/" + 
+                    "${{ github.run_id }}"
+            }
+          }
+          github.rest.repos.createCommitStatus({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            sha: '${{ github.event.workflow_run.head_sha}}',
+            state: state,
+            target_url: url,
+            description: description,
+            context: 'rperform comment'
+          })

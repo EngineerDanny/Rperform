@@ -34,4 +34,3 @@ list_commits(path)
 }
 
 }
-

@@ -33,6 +33,7 @@ master branch of the repo's remote.
   Function assumes the current directory to be the parent directory of the 
   the repository being tested.
 }
+
 \examples{
 
 \dontrun{
@@ -48,4 +49,3 @@ plot_PR_webpage(t_path, metric = "time")
 }
 
 }
-

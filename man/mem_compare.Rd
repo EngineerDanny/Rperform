@@ -4,13 +4,16 @@
 \alias{mem_compare}
 \title{Test-file's memory statistics for multiple commits.}
 \usage{
-mem_compare(test_path, num_commits = 10)
+mem_compare(test_path, num_commits = 10, save_data = FALSE)
 }
 \arguments{
 \item{test_path}{File-path for the test file which is to be checked.}
 
 \item{num_commits}{number of commits against all of which the memory stats
 are to be checked starting from the most recent one.}
+
+\item{save_data}{Boolean value indicating whether the data-frame should be
+saved to a file. Default is FALSE.}
 }
 \description{
 Given a test-file's path, checks its memory metrics against the number of 
@@ -36,6 +39,7 @@ The data-frame consists of the following columns:
   Function assumes the current directory to be the root directory of the
   package being tested.
 }
+
 \examples{
 
 \dontrun{
@@ -49,8 +53,7 @@ t_path <- "Path/to/file"
 
 # Pass the parameters and obtain the run-time details
 library(Rperform)
-mem_compare(t_path, 10)
+mem_compare(t_path, 10, FALSE)
 }
 
 }
-

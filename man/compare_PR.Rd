@@ -50,6 +50,7 @@ The second member is a data-frame and consists of the following columns:
   Function assumes the current directory to be the parent directory of the 
   the repository being tested.
 }
+
 \examples{
 
 \dontrun{
@@ -65,4 +66,3 @@ compare_PR(t_path, metric = "time")
 }
 
 }
-

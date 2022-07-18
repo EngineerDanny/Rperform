@@ -1,7 +1,7 @@
 Package: Rperform
 Type: Package
 Title: Rperform - Performance testing for R packages
-Version: 0.0.0.9000
+Version: 0.0.1
 License: GPL-3
 Date: 2015-05-29
 Author: Akash Tandon (analyticalmonk on GitHub), Toby Dylan Hocking
@@ -14,10 +14,15 @@ Imports:
     ggplot2 (>= 1.0.1),
     testthat (>= 0.10.0),
     devtools (>= 1.8.0),
-    microbenchmark (>= 1.4-2)
+    microbenchmark (>= 1.4-2),
+    cli (>= 3.0.1),
+    fs (>= 1.5.2),
+    purrr (>= 0.3.4)
 Suggests:
     animint2,
     rmarkdown,
+    glue,
+    rlang,
     knitr
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
+RoxygenNote: 7.2.0

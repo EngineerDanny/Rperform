@@ -38,6 +38,7 @@ The data-frame consists of the following columns:
   Function assumes the current directory to be the root directory of the
   package being tested.
 }
+
 \examples{
 
 \dontrun{
@@ -55,4 +56,3 @@ get_mem(t_path, 3)
 }
 
 }
-

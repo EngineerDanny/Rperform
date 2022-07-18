@@ -4,8 +4,14 @@
 \alias{plot_branchmetrics}
 \title{Plot and compare different versions of test files across two branches.}
 \usage{
-plot_branchmetrics(test_path, metric, branch1, branch2 = "master",
-  save_data = FALSE, save_plots = TRUE)
+plot_branchmetrics(
+  test_path,
+  metric,
+  branch1,
+  branch2 = "master",
+  save_data = FALSE,
+  save_plots = TRUE
+)
 }
 \arguments{
 \item{test_path}{File-path of the test-file which is to be used for run-time
@@ -22,11 +28,11 @@ This is supposedly the branch into which branch1 is to be merged and its
 default value is set to 'master'.}
 
 \item{save_data}{If set to TRUE, the data frame containing the metrics
-information is stored in the 'Rperform_Data' directory in the root of the
-repo. (default set to FALSE)}
+information is stored in the 'rperform/{TEST_NAME}' directory 
+in the root of the repo. (default set to FALSE)}
 
 \item{save_plots}{If set to TRUE, the plots generated are stored in the
-'Rperform_plots' directory in the root of the repo rather than being
+'rperform/{TEST_NAME}' directory in the root of the repo rather than being
 printed. (default set to TRUE)}
 }
 \description{
@@ -54,6 +60,7 @@ accordance with those specified using the parameter metric.
   Function assumes the current directory to be the root directory of the
   repository/package being tested.
 }
+
 \examples{
 
 \dontrun{
@@ -87,4 +94,3 @@ plot_metrics(test_path = t_path, metric = "testMetrics", branch1 = "experiment")
 }
 
 }
-

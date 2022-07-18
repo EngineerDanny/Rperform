@@ -5,8 +5,11 @@
 \title{Plot the specified metrics of all test files in a specified directory on a
 webpage.}
 \usage{
-plot_webpage(test_directory = "tests/testthat", metric = "testMetrics",
-  output_name = "RperformTest.html")
+plot_webpage(
+  test_directory = "tests/testthat",
+  metric = "testMetrics",
+  output_name = "RperformTest.html"
+)
 }
 \arguments{
 \item{test_directory}{Path of the directory containing the test files.}
@@ -26,6 +29,7 @@ directory of the current git repository on a webpage.
   Function assumes the current directory to be the root directory of the
   repository being tested.
 }
+
 \examples{
 
 \dontrun{
@@ -51,4 +55,3 @@ plot_webpage(d_path, metric = "testMetrics", output_name = "testMetricsPage")
 }
 
 }
-

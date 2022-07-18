@@ -269,7 +269,8 @@ time_commit <- function(test_path, test_commit) {
 #'   comparisons.
 #' @param num_commits Number of commits (versions) against which the file is to
 #'   be tested, with default being 10.
-#'   
+#' @param save_data Boolean value indicating whether the data-frame should be
+#'   saved to a file. Default is FALSE.
 #' @examples
 #' 
 #' \dontrun{
@@ -283,7 +284,7 @@ time_commit <- function(test_path, test_commit) {
 #' 
 #' # Pass the parameters and obtain the run-time details against 10 commits
 #' library(Rperform)
-#' time_compare(test_path = t_path, num_commits = 10)
+#' time_compare(test_path = t_path, num_commits = 10, save_data = FALSE)
 #' }
 #' 
 #' @section Value:
@@ -308,11 +309,13 @@ time_commit <- function(test_path, test_commit) {
 # (if successful), datetime and message corresponding to the commit the value is
 # for.
 
-time_compare <- function(test_path, num_commits = 10) {
+time_compare <- function(test_path, num_commits = 10, save_data = FALSE) {
   stopifnot(is.character(test_path))
   stopifnot(length(test_path) == 1)
   stopifnot(is.numeric(num_commits))
   stopifnot(length(num_commits) == 1)
+  stopifnot(is.logical(save_data))
+  stopifnot(length(save_data) == 1)
   num_commits <- floor(num_commits)
   
   target <- git2r::repository("./")
@@ -325,6 +328,7 @@ time_compare <- function(test_path, num_commits = 10) {
   } 
   
   test_results <- do.call(rbind, result_list)
+
   test_results
 }
 
@@ -585,7 +589,8 @@ get_mem <- function(test_path, commit_num = 1) {
 #' @param test_path File-path for the test file which is to be checked.
 #' @param num_commits number of commits against all of which the memory stats
 #'   are to be checked starting from the most recent one.
-#'   
+#' @param save_data Boolean value indicating whether the data-frame should be
+#'   saved to a file. Default is FALSE.  
 #' @examples
 #' 
 #' \dontrun{
@@ -599,7 +604,7 @@ get_mem <- function(test_path, commit_num = 1) {
 #' 
 #' # Pass the parameters and obtain the run-time details
 #' library(Rperform)
-#' mem_compare(t_path, 10)
+#' mem_compare(t_path, 10, FALSE)
 #' }
 #' 
 #' @section Value:
@@ -623,11 +628,13 @@ get_mem <- function(test_path, commit_num = 1) {
 # utilized during the file's execution. It does so against the specified number
 # of commits from the git log in the current git repository.
 
-mem_compare <- function(test_path, num_commits = 10) {
+mem_compare <- function(test_path, num_commits = 10, save_data = FALSE) {
   stopifnot(is.character(test_path))
   stopifnot(length(test_path) == 1)
   stopifnot(is.numeric(num_commits))
   stopifnot(length(num_commits) == 1)
+  stopifnot(is.logical(save_data))
+  stopifnot(length(save_data) == 1)
   num_commits <- floor(num_commits)
   
   script.R <- system.file("exec", "get_mem.R", package="Rperform")
@@ -647,8 +654,8 @@ mem_compare <- function(test_path, num_commits = 10) {
   
   system("rm *RSS*")
   system("rm mem_result.RData")
-  do.call(what = rbind, args = result_list)
-  
+  test_results <- do.call(what = rbind, args = result_list)
+
+  test_results  
 }
 
-##  -----------------------------------------------------------------------------------------
