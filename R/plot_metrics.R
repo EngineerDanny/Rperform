@@ -884,7 +884,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
     prepare_dir(target_dir)
     # Save the metric data as csv file
     csv_file <- file.path(target_dir, paste0("test_data", ".csv"))
-    write.csv2(time_frame,
+    write.csv(time_frame,
       file = csv_file
     )
     create_pr_comment(time_frame, "test_function",target_dir, folder_name)
@@ -896,7 +896,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
     # Save the metric data as csv file
     csv_file <- file.path(target_dir, paste0("test_data", ".csv"))
 
-    write.csv2(mem_frame,
+    write.csv(mem_frame,
       file = csv_file
     )
     create_pr_comment(mem_frame, "test_function", target_dir, folder_name)
