@@ -244,18 +244,21 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
   # Plot the metric data
   tryCatch(expr =   {test_plot <- 
     ggplot2::ggplot() +
-    ggplot2::geom_point(mapping = ggplot2::aes(message, metric_val), 
+    ggplot2::geom_point(mapping = ggplot2::aes(sha, metric_val), 
                         data = time_data, color = "blue") +
+    ggplot2::scale_y_log10() +
     ggplot2::facet_grid(facets =  test_name ~ ., scales = "free") +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -45)) +
-    ggplot2::scale_x_discrete(limits = rev(levels(time_data$message))) +
-    # In the above 5 lines of code, the first line creates the basic qplot. The
-    # fourth and fifth lines display the x-axis labels at 90 degrees to the
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -90, hjust = 0, vjust = 0.5)) +
+    ggplot2::scale_x_discrete(limits = rev(time_data$sha), 
+                              labels = time_data$message, expand = c(0.03, 0.03)) +
+    # In the above 6 lines of code, the first line creates the basic qplot. The
+    # fifth and sixth lines display the x-axis labels at 90 degrees to the
     # horizontal and correct the order of message labels on the x -axis,
     # respectively.
     ggplot2::xlab("Commit message") +
     ggplot2::ylab("Time (in seconds)") +
-    ggplot2::ggtitle(label = paste0("Variation in time metrics for ", curr_name))
+    ggplot2::ggtitle(label = paste0("Variation in time metrics for ", curr_name))+ 
+    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5, face = "bold"))
   
   if (save_plots == TRUE) {
     .save_plots(
@@ -920,6 +923,11 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
     target_dir <- paste0("./rperform/results/TestMetrics_", date_time)
     prepare_dir(target_dir)
   }
+
+  dynamic_width <-  2.2 * nrow(test_data);
+  height_factor <- 2.2
+
+
 
   curr_name <- gsub(pattern = " ", replacement = "_", x = test_name)
   curr_name <- gsub(pattern = ".[rR]$", replacement = "", curr_name)
