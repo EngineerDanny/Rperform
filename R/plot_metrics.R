@@ -154,7 +154,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
     
     
     if (save_plots == TRUE) {
-      .save_plots(test_plot = test_plot, test_name = t_names[num], metric = "testMetrics")
+      .save_plots(test_plot = test_plot, test_data = test_frame, test_name = t_names[num], metric = "testMetrics")
       print(test_plot)
     }
     else {
@@ -262,7 +262,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
   
   if (save_plots == TRUE) {
     .save_plots(
-      test_plot = test_plot, test_name = curr_name, metric = "time",
+      test_plot = test_plot, test_data = test_data, test_name = curr_name, metric = "time",
       width = 1600, height = 1200, sys_time = sys_time
     )
     print(test_plot)
@@ -366,7 +366,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
     ggplot2::ggtitle(label = paste0("Variation in memory metrics for ", curr_name))
   
   if (save_plots == TRUE) {
-    .save_plots(test_plot = test_plot, test_name = curr_name, metric = "memory")
+    .save_plots(test_plot = test_plot, test_data = mem_data, test_name = curr_name, metric = "memory")
     print(test_plot)
   }
   else {
@@ -704,7 +704,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
     curr_name <- paste0(branch1, "_", branch2, "_", t_names[num])
     
     if (save_plots == TRUE) {
-      .save_plots(test_plot = test_plot, test_name = t_names[num],
+      .save_plots(test_plot = test_plot,test_data = test_frame, test_name = t_names[num],
                   metric = "testMetrics")
       print(test_plot)
     } else {
@@ -779,7 +779,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
                                     branch2, " and ", branch1))
   
   if (save_plots == TRUE) {
-    .save_plots(test_plot = test_plot, test_name = curr_name, metric = "time",
+    .save_plots(test_plot = test_plot, test_data = time_data, test_name = curr_name, metric = "time",
                 width = 1600, height = 900)
     print(test_plot)
   }
@@ -854,7 +854,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
                                     branch2, " and ", branch1))
   
   if (save_plots == TRUE) {
-    .save_plots(test_plot = test_plot, test_name = curr_name, metric = "memory")
+    .save_plots(test_plot = test_plot, test_data = mem_data, test_name = curr_name, metric = "memory")
     print(test_plot)
   }
   else {
@@ -908,7 +908,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
 
 ##  -----------------------------------------------------------------------------------------
 
-.save_plots <- function(test_plot, test_name, metric, width = 1024, height = 768, units = "px", sys_time = Sys.time()) {
+.save_plots <- function(test_plot, test_data, test_name, metric, width = 1024, height = 768, units = "px", sys_time = Sys.time()) {
   # get date time in milliseconds
   date_time <- as.integer(sys_time)
 
@@ -924,8 +924,11 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
     prepare_dir(target_dir)
   }
 
-  dynamic_width <-  2.2 * nrow(test_data);
-  height_factor <- 2.2
+  dynamic_width <-  2.2 * nrow(test_data)
+  #panel_no <- length(levels(test_plot$data[[1]]$PANEL))
+  #max_metric <- max(test_data$metric_val, na.rm = TRUE)
+  height_factor <- 1400
+  dynamic_height <- height_factor * nrow(test_data)
 
 
 
