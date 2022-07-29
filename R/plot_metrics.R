@@ -924,26 +924,21 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
     prepare_dir(target_dir)
   }
 
-  dynamic_width <-  2.2 * nrow(test_data)
+
+  dynamic_width <-  2.5 * base::nrow(test_data)
   
-  no_of_panels <- length(levels(test_plot$data[[1]]$PANEL))
+  build_output <- ggplot2::ggplot_build(test_plot)
+  no_of_panels <- length(levels(build_output$data[[1]]$PANEL))
   max_metric <- max(test_data$metric_val, na.rm = TRUE)
-  dynamic_height <- 1400 * no_of_panels * max_metric
-
-  # round scale up
-  scale <- ceiling(dynamic_width  / dynamic_height)
-
-
+  dynamic_height <- 1700 * no_of_panels * max_metric
 
   curr_name <- gsub(pattern = " ", replacement = "_", x = test_name)
   curr_name <- gsub(pattern = ".[rR]$", replacement = "", curr_name)
   png_file <- file.path(target_dir, paste0("test_image", ".png"))
 
-  ggplot2::ggsave(png_file, width = dynamic_width, height = dynamic_height, limitsize = F, units = "px", scale = scale)
-
-  # grDevices::png(filename = png_file, width = width, height = height, units = units)
-  # print(test_plot)
-  # grDevices::dev.off()
+  grDevices::png(filename = png_file, width = dynamic_width, height = dynamic_height, units = units)
+  print(test_plot)
+  grDevices::dev.off()
 }
 
 ##  -----------------------------------------------------------------------------------------
