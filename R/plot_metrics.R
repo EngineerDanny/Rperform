@@ -32,6 +32,10 @@ utils::globalVariables(c("metric_val", "test_name", "mid_val",
 #'   printed. (default set to TRUE)
 #' @param interactive If set to TRUE, the plots generated are interactive. The
 #'   resulting plot is rendered in the default browser.
+#' @param total_height_in The total height of the graph in inches.
+#' If not set, a reasonable default will be used
+#' @param total_width_in The total width of the graph in inches.
+#' If not set, a reasonable default will be used
 #'
 #' @examples
 #'
