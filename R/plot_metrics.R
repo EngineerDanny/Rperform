@@ -64,8 +64,7 @@ utils::globalVariables(c("metric_val", "test_name", "mid_val",
 #'   repository/package being tested.
 #'
 
-plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, save_plots = FALSE,
-                         interactive = FALSE){                     
+plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, save_plots = FALSE, interactive = FALSE, total_height_in, total_width_in ){                     
   stopifnot(is.character(test_path))
   stopifnot(length(test_path) == 1)
   stopifnot(is.character(metric))
@@ -84,14 +83,14 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
     if (interactive) {
       temp_out <- capture.output(.plot_interactive_time(test_path, num_commits, save_data, save_plots))
     } else {
-      temp_out <- capture.output(.plot_time(test_path, num_commits, save_data, save_plots, sys_time))      
+      temp_out <- capture.output(.plot_time(test_path, num_commits, save_data, save_plots, sys_time, total_height_in, total_width_in))      
     }
   }
   else if (metric == "memory") {
     if (interactive) {
       temp_out <- capture.output(.plot_interactive_mem(test_path, num_commits, save_data, save_plots))
     } else {
-      temp_out <- capture.output(.plot_mem(test_path, num_commits, save_data, save_plots))      
+      temp_out <- capture.output(.plot_mem(test_path, num_commits, save_data, save_plots, total_height_in, total_width_in))      
     }
   }
   else if (metric == "memtime") {
@@ -224,12 +223,11 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
 ##  -----------------------------------------------------------------------------------------
 
 
-.plot_time <- function(test_path, num_commits, save_data, save_plots, sys_time) {
+.plot_time <- function(test_path, num_commits, save_data, save_plots, sys_time , total_height_in, total_width_in ){
   # Obtain the metrics data
   suppressMessages(time_data <- time_compare(test_path, num_commits))
   # Store the metrics data if save_data is TRUE
   if (save_data){
-    
     # Store the metric data
     .save_data(time_data,
       pattern = "*.[rR]$", replacement = "_time.RData",
@@ -262,8 +260,8 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
   
   if (save_plots == TRUE) {
     .save_plots(
-      test_plot = test_plot, test_data = test_data, test_name = curr_name, metric = "time",
-      width = 1600, height = 1200, sys_time = sys_time
+      test_plot = test_plot, test_data = test_data, test_name = curr_name, metric = "time", 
+      sys_time = sys_time, total_height_in, total_width_in
     )
     print(test_plot)
   }
@@ -333,7 +331,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
 
 ##  -----------------------------------------------------------------------------------------
 
-.plot_mem <- function(test_path, num_commits, save_data, save_plots) {
+.plot_mem <- function(test_path, num_commits, save_data, save_plots, total_height_in, total_width_in) {
   
   # Obtain the metrics data
   suppressMessages(mem_data <- mem_compare(test_path, num_commits))
@@ -366,7 +364,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
     ggplot2::ggtitle(label = paste0("Variation in memory metrics for ", curr_name))
   
   if (save_plots == TRUE) {
-    .save_plots(test_plot = test_plot, test_data = mem_data, test_name = curr_name, metric = "memory")
+    .save_plots(test_plot = test_plot, test_data = mem_data, test_name = curr_name, metric = "memory", total_height_in, total_width_in)
     print(test_plot)
   }
   else {
@@ -779,8 +777,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
                                     branch2, " and ", branch1))
   
   if (save_plots == TRUE) {
-    .save_plots(test_plot = test_plot, test_data = time_data, test_name = curr_name, metric = "time",
-                width = 1600, height = 900)
+    .save_plots(test_plot = test_plot, test_data = time_data, test_name = curr_name, metric = "time")
     print(test_plot)
   }
   else {
@@ -908,7 +905,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
 
 ##  -----------------------------------------------------------------------------------------
 
-.save_plots <- function(test_plot, test_data, test_name, metric, width = 1024, height = 768, units = "px", sys_time = Sys.time()) {
+.save_plots <- function(test_plot, test_data, test_name, metric, sys_time = Sys.time(), total_height_in, total_width_in) {
   # get date time in milliseconds
   date_time <- as.integer(sys_time)
 
@@ -936,7 +933,12 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
   curr_name <- gsub(pattern = ".[rR]$", replacement = "", curr_name)
   png_file <- file.path(target_dir, paste0("test_image", ".png"))
 
-  grDevices::png(filename = png_file, width = dynamic_width, height = dynamic_height, units = units)
+  # ggplot2::ggsave(png_file,
+  #                 plot = test_plot,
+  #                 width = dynamic_width,
+  #                 height = dynamic_height,
+  #                 units = units)
+  grDevices::png(filename = png_file, width = dynamic_width, height = dynamic_height, units = "px")
   print(test_plot)
   grDevices::dev.off()
 }
