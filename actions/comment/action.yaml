@@ -114,12 +114,39 @@ runs:
               commentsBody += fileBody;
             }
           });
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: prNumber,
-              body: commentsBody
-            });
+
+            // Get the list of all the comments on the PR
+            const response = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber
+            })
+            const oldComments = response.data;
+
+            // Get the comment made by the action
+            const actionComment = oldComments.find(comment => comment.user.login === "rperform-action");
+
+            // Print the comment made by the action
+            if (actionComment) {
+                console.log(actionComment);
+            }
+            
+            // If actionComment exists, update it otherwise create a new comment
+            if (actionComment) {
+                await github.rest.issues.updateComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    comment_id: actionComment.id,
+                    body: commentsBody
+                })
+            } else {
+                await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: prNumber,
+                    body: commentsBody
+                })
+            }
     - uses: actions/github-script@v5
       if: always()
       with:
