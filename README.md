@@ -17,7 +17,9 @@
 
 *The project has also been accepted into the [Google Summer of Code 2022](https://github.com/rstats-gsoc/gsoc2022/wiki/Rperform) program with [Toby Dylan Hocking](https://github.com/tdhock), [Akash Tandon](https://github.com/analyticalmonk) and [Randy Lai](mailto:randy.cs.lai@gmail.com) as the mentors.
 
-**NEW :** You can set up your Github CI with the Rperform package and use it to test your packages. Check out this [Wiki](https://github.com/EngineerDanny/Rperform/wiki/Setting-up-Github-CI-with-Rperform) page and follow the instructions. 
+# Usage With Github Actions
+
+You can set up your Github CI with the Rperform package and use it to test your packages. Check out this [Wiki](https://github.com/EngineerDanny/Rperform/wiki/Setting-up-Github-CI-with-Rperform) page and follow the instructions. 
 
 # Installation
 ``` r
