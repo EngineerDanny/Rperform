@@ -36,12 +36,8 @@ jobs:
           - ${{ fromJson(needs.prepare.outputs.config) }}
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      # RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: EngineerDanny/Rperform/actions/receive@github-actions
         with:
           cache-version: 1
-          benchmarking_repo: ${{ matrix.config.benchmarking_repo }}
-          benchmarking_ref: ${{ matrix.config.benchmarking_ref }}
-          benchmarking_path: ${{ matrix.config.benchmarking_path }}
