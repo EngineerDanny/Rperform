@@ -46,14 +46,14 @@ runs:
           any::glue
           github::EngineerDanny/Rperform${{ inputs.rperform_ref}}
           
-    - name: Remove global installation
-      run: |
-        pkg <- unlist(read.dcf('DESCRIPTION')[, 'Package'])
-        if (pkg %in% rownames(installed.packages())) {
-          remove.packages(pkg)
-          cat('removed package ', pkg, '.', sep = "")
-        }
-      shell: Rscript {0}
+    # - name: Remove global installation
+    #   run: |
+    #     pkg <- unlist(read.dcf('DESCRIPTION')[, 'Package'])
+    #     if (pkg %in% rownames(installed.packages())) {
+    #       remove.packages(pkg)
+    #       cat('removed package ', pkg, '.', sep = "")
+    #     }
+    #   shell: Rscript {0}
 
     - name: "Save Current Time Integer"
       id: "set-time"
