@@ -124,9 +124,9 @@ runs:
             const comments = response.data;
 
             // Get the comment made by the action
-            const comment_identifier = "<!-- Rperform-action comment-->"
-            const action_comment = comments.find(comment => comment.body.includes(comment_identifier))
-            const new_comment_body = `${comment_identifier}\n${report}`
+            const commentIdentifier = "<!-- Rperform-action comment-->"
+            const actionComment = comments.find(comment => comment.body.includes(commentIdentifier))
+            const newCommentBody = `${commentIdentifier}\n${report}`
 
             // Print the comment made by the action
             console.log(actionComment);
@@ -137,13 +137,13 @@ runs:
                     owner: context.repo.owner,
                     repo: context.repo.repo,
                     comment_id: actionComment.id,
-                    body: new_comment_body
+                    body: newCommentBody
                 })
             } else {
                 await github.rest.issues.createComment({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
                     issue_number: prNumber,
-                    body: new_comment_body
+                    body: newCommentBody
                 })
             }
