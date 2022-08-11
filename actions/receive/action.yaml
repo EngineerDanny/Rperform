@@ -45,16 +45,7 @@ runs:
           any::gert
           any::glue
           github::EngineerDanny/Rperform${{ inputs.rperform_ref}}
-          
-    - name: Remove global installation
-      run: |
-        pkg <- unlist(read.dcf('DESCRIPTION')[, 'Package'])
-        if (pkg %in% rownames(installed.packages())) {
-          remove.packages(pkg)
-          cat('removed package ', pkg, '.', sep = "")
-        }
-      shell: Rscript {0}
-
+  
     - name: "Save Current Time Integer"
       id: "set-time"
       uses: actions/github-script@v6
@@ -77,9 +68,7 @@ runs:
       run: |
         echo $PULL_REQUEST_NUMBER > ./rperform/results/PR_NO
         echo "${{steps.set-time.outputs.result}}"  > ./rperform/results/TIME_NO
-
     - uses: actions/upload-artifact@v2
       with:
         name: pr
         path: rperform/results/
-
