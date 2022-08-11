@@ -102,7 +102,7 @@ runs:
           const initTime = Number(fs.readFileSync('./rperform-results/TIME_NO'));
           
           var pr_files = readFiles('./rperform-results');
-          var commentsBody = "";
+          var report = "";
 
            pr_files.forEach(file => {
             const split1 = file.split("_");
@@ -111,7 +111,7 @@ runs:
 
             if(scriptTime >= initTime){
               const fileBody = fs.readFileSync(file).toString();
-              commentsBody += fileBody;
+              report += fileBody;
             }
           });
 
@@ -121,10 +121,12 @@ runs:
                 repo: context.repo.repo,
                 issue_number: prNumber
             })
-            const oldComments = response.data;
+            const comments = response.data;
 
             // Get the comment made by the action
-            const actionComment = oldComments.find(comment => comment.user.login === "rperform-action");
+            const comment_identifier = "<!-- Rperform-action comment-->"
+            const action_comment = comments.find(comment => comment.body.includes(comment_identifier))
+            const new_comment_body = `${comment_identifier}\n${report}`
 
             // Print the comment made by the action
             console.log(actionComment);
@@ -135,39 +137,13 @@ runs:
                     owner: context.repo.owner,
                     repo: context.repo.repo,
                     comment_id: actionComment.id,
-                    body: commentsBody
+                    body: new_comment_body
                 })
             } else {
                 await github.rest.issues.createComment({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
                     issue_number: prNumber,
-                    body: commentsBody
+                    body: new_comment_body
                 })
             }
-    - uses: actions/github-script@v5
-      if: always()
-      with:
-        script: |
-          let url = '${{ github.event.workflow_run.html_url }}'
-          let any_failed = ${{ steps.comment.outcome == 'failure' || steps.download.outcome == 'failure' }}
-          let state = 'success'
-          let description = 'Commenting succeeded!'
-
-          if(${{ github.event.workflow_run.conclusion == 'failure'}} || any_failed) {
-            state = 'failure'
-            description = 'Commenting failed!'
-            if(any_failed) {
-              url = "https://github.com/${{github.repository}}/actions/runs/" + 
-                    "${{ github.run_id }}"
-            }
-          }
-          github.rest.repos.createCommitStatus({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            sha: '${{ github.event.workflow_run.head_sha}}',
-            state: state,
-            target_url: url,
-            description: description,
-            context: 'rperform comment'
-          })
