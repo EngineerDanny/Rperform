@@ -102,7 +102,7 @@ runs:
           const initTime = Number(fs.readFileSync('./rperform-results/TIME_NO'));
           
           var pr_files = readFiles('./rperform-results');
-          const commentsBody = "";
+          var commentsBody = "";
 
            pr_files.forEach(file => {
             const split1 = file.split("_");
@@ -127,9 +127,7 @@ runs:
             const actionComment = oldComments.find(comment => comment.user.login === "rperform-action");
 
             // Print the comment made by the action
-            if (actionComment) {
-                console.log(actionComment);
-            }
+            console.log(actionComment);
             
             // If actionComment exists, update it otherwise create a new comment
             if (actionComment) {
