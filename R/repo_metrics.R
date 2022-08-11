@@ -46,7 +46,7 @@ list_commits <- function(path = "./", num_commits = 20){
   stopifnot(is.numeric(num_commits))
   stopifnot(length(num_commits) == 1)
   num_commits <- floor(num_commits)
-
+  
   target <- git2r::repository(path)
   
   commit_list <- git2r::commits(target, n = num_commits)
@@ -55,9 +55,10 @@ list_commits <- function(path = "./", num_commits = 20){
   date_list <- list()
   
   for (i in 1:num_commits) {
-    com <- attr(commit_list[[i]], which = "sha")
-    msg <- attr(commit_list[[i]], which = "summary")
-    com_date <- as(commit_list[[i]]@committer@when, "character")
+    com <- commit_list[[i]]$sha
+    msg <- commit_list[[i]]$summary    
+    com_date <- commit_list[[i]]$author$when
+    
     sha_list[i] <- com
     msg_list[i] <- msg
     date_list[i] <- com_date
@@ -67,7 +68,7 @@ list_commits <- function(path = "./", num_commits = 20){
 }
 
 ##  -----------------------------------------------------------------------------------------
-                                   ## TIME CHUNK BEGINS ##
+## TIME CHUNK BEGINS ##
 ##  -----------------------------------------------------------------------------------------
 
 #' Test file's run-time.
@@ -125,7 +126,7 @@ time_commit <- function(test_path, test_commit) {
   stopifnot(length(test_path) == 1)
   stopifnot(!is.null(test_commit))
   stopifnot(git2r::is_commit(test_commit))
-
+  
   # Get the meta-information from the commit
   sha_val <- get_sha(test_commit)
   msg_val <- get_msg(test_commit)
@@ -150,52 +151,52 @@ time_commit <- function(test_path, test_commit) {
   writeLines(q_lines, temp_file_subbed)
   
   target <- git2r::repository("./")
-# Reverting to the current branch on exit from the function
-######################################################################  
-  original_state <- git2r::head(target)
+  # Reverting to the current branch on exit from the function
+  ######################################################################  
+  original_state <- git2r::repository_head(target)
   git2r::checkout(test_commit)
   on.exit(expr = git2r::checkout(original_state))
-######################################################################
+  ######################################################################
   test_results <- list()
-
-# Loads the functions from the repository for the package to be tested
-  suppressPackageStartupMessages(devtools::load_all(file.path("./")))
-
   
-# Code block measuring the run-time for the test file as a whole
-# --------------------------------------------------------------
+  # Loads the functions from the repository for the package to be tested
+  suppressPackageStartupMessages(devtools::load_all(file.path("./")))
+  
+  
+  # Code block measuring the run-time for the test file as a whole
+  # --------------------------------------------------------------
   
   # require(testthat)
   file_status = "pass"
-# We have used tryCatch so that execution doesn't stop in case of an error
-# in the test file. Rather we will modify the values in the result data frame
-# (time as NA, status as 'fail') to let the user know of the error.
+  # We have used tryCatch so that execution doesn't stop in case of an error
+  # in the test file. Rather we will modify the values in the result data frame
+  # (time as NA, status as 'fail') to let the user know of the error.
   seconds_file <- tryCatch(expr = {
-      if(requireNamespace('microbenchmark')){
-        times <- microbenchmark::microbenchmark(test = {
-          base::source(temp_file_original, local = T)
-        }, times = 3)
-        times$time/1e9
-      } else {
-        replicate(3, {
-          time_vec <- system.time( {
-            source(temp_file_original, local = T)
-          } )
-          time_vec[["elapsed"]]
-        })
-      }
-    },
-    error = function(e){
-      file_status = "fail"
-      NA
+    if(requireNamespace('microbenchmark')){
+      times <- microbenchmark::microbenchmark(test = {
+        base::source(temp_file_original, local = T)
+      }, times = 3)
+      times$time/1e9
+    } else {
+      replicate(3, {
+        time_vec <- system.time( {
+          source(temp_file_original, local = T)
+        } )
+        time_vec[["elapsed"]]
+      })
     }
+  },
+  error = function(e){
+    file_status = "fail"
+    NA
+  }
   )
-
-# ---------------------------------------------------------------
-
-# Code block measuring the run-time of the testthat code blocks (if present)
-# --------------------------------------------------------------------------
-
+  
+  # ---------------------------------------------------------------
+  
+  # Code block measuring the run-time of the testthat code blocks (if present)
+  # --------------------------------------------------------------------------
+  
   testthatQuantity <- function(test_name, code){
     e <- parent.frame()
     code_subs <- substitute(code)
@@ -207,50 +208,50 @@ time_commit <- function(test_path, test_commit) {
     # in a testthat block. Rather we modify the values in the result data frame
     # (time as NA, status as 'fail') to let the user know of the error.
     seconds <- tryCatch(expr = {
-        if(requireNamespace('microbenchmark')){
-          times <- microbenchmark::microbenchmark(test = {
+      if(requireNamespace('microbenchmark')){
+        times <- microbenchmark::microbenchmark(test = {
+          run()
+        }, times = 3)
+        times$time/1e9
+      } else {
+        replicate(3, {
+          time_vec <- system.time( {
             run()
-          }, times = 3)
-          times$time/1e9
-        } else {
-          replicate(3, {
-            time_vec <- system.time( {
-              run()
-            } )
-            time_vec[["elapsed"]]
-          })
-        }
-      },
-      error = function(e){
-        status = "fail"
-        NA
+          } )
+          time_vec[["elapsed"]]
+        })
       }
+    },
+    error = function(e){
+      status = "fail"
+      NA
+    }
     )
-
+    
     time_df <- data.frame(test_name, metric_name = "runtime (in seconds)", status, 
                           metric_val = seconds, message = msg_val, 
-                          sha = sha_val, date_time = commit_dtime)
+                          sha = sha_val, date_time = commit_dtime)                     
     test_results[[test_name]] <<- time_df
   }
-
+  
   source(temp_file_subbed, local = T)
-
-# --------------------------------------------------------------------------
-
-
-# Formatting the output
-# --------------------------------------------------------------------------
-
+  
+  # --------------------------------------------------------------------------
+  
+  
+  # Formatting the output
+  # --------------------------------------------------------------------------
+  
   test_results_df <- do.call(rbind, test_results)
-#   test_results_df["file runtime"] <- seconds_file
-#   test_results_df["file runtime-2"] <- seconds_file2
+  #   test_results_df["file runtime"] <- seconds_file
+  #   test_results_df["file runtime-2"] <- seconds_file2
   test_results_df <- rbind(test_results_df, data.frame(test_name = basename(test_path), 
-                                       metric_name = "runtime (in seconds)", status = file_status,
-                                       metric_val = seconds_file, message = msg_val, 
-                                       sha = sha_val, date_time = commit_dtime))
+                                                       metric_name = "runtime (in seconds)", status = file_status,
+                                                       metric_val = seconds_file, message = msg_val, 
+                                                       sha = sha_val, date_time = commit_dtime))
   rownames(test_results_df) <- NULL
   test_results_df
-
+  
 }
 
 ##  -----------------------------------------------------------------------------------------
@@ -268,7 +269,8 @@ time_commit <- function(test_path, test_commit) {
 #'   comparisons.
 #' @param num_commits Number of commits (versions) against which the file is to
 #'   be tested, with default being 10.
-#'   
+#' @param save_data Boolean value indicating whether the data-frame should be
+#'   saved to a file. Default is FALSE.
 #' @examples
 #' 
 #' \dontrun{
@@ -282,7 +284,7 @@ time_commit <- function(test_path, test_commit) {
 #' 
 #' # Pass the parameters and obtain the run-time details against 10 commits
 #' library(Rperform)
-#' time_compare(test_path = t_path, num_commits = 10)
+#' time_compare(test_path = t_path, num_commits = 10, save_data = FALSE)
 #' }
 #' 
 #' @section Value:
@@ -307,28 +309,31 @@ time_commit <- function(test_path, test_commit) {
 # (if successful), datetime and message corresponding to the commit the value is
 # for.
 
-time_compare <- function(test_path, num_commits = 10) {
+time_compare <- function(test_path, num_commits = 10, save_data = FALSE) {
   stopifnot(is.character(test_path))
   stopifnot(length(test_path) == 1)
   stopifnot(is.numeric(num_commits))
   stopifnot(length(num_commits) == 1)
+  stopifnot(is.logical(save_data))
+  stopifnot(length(save_data) == 1)
   num_commits <- floor(num_commits)
   
   target <- git2r::repository("./")
   commit_list <- git2r::commits(target, n = num_commits)
   result_list <- list()
-
+  
   for(commit_i in seq_along(commit_list)){
     one_commit <- commit_list[[commit_i]]
     suppressMessages(result_list[[commit_i]] <- time_commit(test_path, one_commit))
   } 
   
   test_results <- do.call(rbind, result_list)
+
   test_results
 }
 
 ##  -----------------------------------------------------------------------------------------
-                                  ## MEMORY CHUNK BEGINS ##
+## MEMORY CHUNK BEGINS ##
 ##  -----------------------------------------------------------------------------------------
 
 #' Test-file's memory statistics.
@@ -415,7 +420,7 @@ mem_commit <- function(test_path, test_commit) {
   
   ## Git operations
   target <- git2r::repository("./")
-  original_state <- git2r::head(target)
+  original_state <- git2r::repository_head(target)
   git2r::checkout(test_commit)
   on.exit(expr = git2r::checkout(original_state))
   test_results <- list()
@@ -458,8 +463,8 @@ mem_commit <- function(test_path, test_commit) {
       )
     
     testthat_maxmem_df <- data.frame(test_name, metric_name = "max_mem", status = test_status,
-                                   metric_val = testthat_rss_list$max_mem/1000, 
-                                   message = msg_val, sha = sha_val, date_time = commit_dtime)
+                                     metric_val = testthat_rss_list$max_mem/1000, 
+                                     message = msg_val, sha = sha_val, date_time = commit_dtime)
     testthat_leak_df <- data.frame(test_name, metric_name = "leak_mem", status = test_status,
                                    metric_val = testthat_rss_list$leak/1000, 
                                    message = msg_val, sha = sha_val, date_time = commit_dtime)
@@ -467,31 +472,31 @@ mem_commit <- function(test_path, test_commit) {
     test_results[[test_name]] <<- rbind(testthat_maxmem_df, testthat_leak_df)
   }
   
-#   source(temp_file_subbed, local = TRUE)
+  #   source(temp_file_subbed, local = TRUE)
   
   ## Obtaining the memory metrics for the file 
   file_name <- basename(test_path)
   file_status <- "pass"
   rss_list <- 
-  tryCatch(expr = {
-    .rss.profile.start(paste0(file_name, ".RSS"))
-    source(temp_file_subbed, local = TRUE)
-    .rss.profile.stop(paste0(file_name, ".RSS"))
-  },
-  error = function(e) {
-    file_status <- "fail"
-    list(max_mem = NA, leak = NA)
-  }
-  )
+    tryCatch(expr = {
+      .rss.profile.start(paste0(file_name, ".RSS"))
+      source(temp_file_subbed, local = TRUE)
+      .rss.profile.stop(paste0(file_name, ".RSS"))
+    },
+    error = function(e) {
+      file_status <- "fail"
+      list(max_mem = NA, leak = NA)
+    }
+    )
   # Check /R/mem_operations.R for source code for the functions .rss.profile.*  
-
+  
   testfile_maxmem_df <- data.frame(test_name = file_name, metric_name = "max_mem",
-                                 status = file_status, metric_val = rss_list$max_mem/1000, 
-                                 message = msg_val, sha = sha_val, date_time = commit_dtime)
+                                   status = file_status, metric_val = rss_list$max_mem/1000, 
+                                   message = msg_val, sha = sha_val, date_time = commit_dtime)
   testfile_leak_df <- data.frame(test_name = file_name, metric_name = "leak_mem",
                                  status = file_status, metric_val = rss_list$leak/1000, 
                                  message = msg_val, sha = sha_val, date_time = commit_dtime)
-
+  
   #Formatting the result dataframe
   testfile_df <- rbind(testfile_maxmem_df, testfile_leak_df)
   testthat_df <- do.call(rbind, test_results)
@@ -503,7 +508,7 @@ mem_commit <- function(test_path, test_commit) {
 ##  -----------------------------------------------------------------------------------------
 ##  -----------------------------------------------------------------------------------------
 
-                       ## TO GET MEMORY DETAILS FOR MULTIPLE COMMITS ##
+## TO GET MEMORY DETAILS FOR MULTIPLE COMMITS ##
 
 #' Test-file's memory statistics.
 #' 
@@ -584,7 +589,8 @@ get_mem <- function(test_path, commit_num = 1) {
 #' @param test_path File-path for the test file which is to be checked.
 #' @param num_commits number of commits against all of which the memory stats
 #'   are to be checked starting from the most recent one.
-#'   
+#' @param save_data Boolean value indicating whether the data-frame should be
+#'   saved to a file. Default is FALSE.  
 #' @examples
 #' 
 #' \dontrun{
@@ -598,7 +604,7 @@ get_mem <- function(test_path, commit_num = 1) {
 #' 
 #' # Pass the parameters and obtain the run-time details
 #' library(Rperform)
-#' mem_compare(t_path, 10)
+#' mem_compare(t_path, 10, FALSE)
 #' }
 #' 
 #' @section Value:
@@ -622,11 +628,13 @@ get_mem <- function(test_path, commit_num = 1) {
 # utilized during the file's execution. It does so against the specified number
 # of commits from the git log in the current git repository.
 
-mem_compare <- function(test_path, num_commits = 10) {
+mem_compare <- function(test_path, num_commits = 10, save_data = FALSE) {
   stopifnot(is.character(test_path))
   stopifnot(length(test_path) == 1)
   stopifnot(is.numeric(num_commits))
   stopifnot(length(num_commits) == 1)
+  stopifnot(is.logical(save_data))
+  stopifnot(length(save_data) == 1)
   num_commits <- floor(num_commits)
   
   script.R <- system.file("exec", "get_mem.R", package="Rperform")
@@ -646,8 +654,8 @@ mem_compare <- function(test_path, num_commits = 10) {
   
   system("rm *RSS*")
   system("rm mem_result.RData")
-  do.call(what = rbind, args = result_list)
-  
+  test_results <- do.call(what = rbind, args = result_list)
+
+  test_results  
 }
 
-##  -----------------------------------------------------------------------------------------

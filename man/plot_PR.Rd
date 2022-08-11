@@ -32,6 +32,7 @@ remote.
   Function assumes the current directory to be the parent directory of the 
   the repository being tested.
 }
+
 \examples{
 
 \dontrun{
@@ -47,4 +48,3 @@ plot_PR(t_path, metric = "time")
 }
 
 }
-

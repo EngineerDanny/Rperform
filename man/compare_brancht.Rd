@@ -37,6 +37,7 @@ The data-frame consists of the following columns:
   Function assumes the current directory to be the root directory of the
   package being tested.
 }
+
 \examples{
 
 \dontrun{
@@ -52,4 +53,3 @@ compare_brancht(test_path = t_path, branch1 = "helper", branch2 = "master")
 }
 
 }
-

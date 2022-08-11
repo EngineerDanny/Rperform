@@ -34,6 +34,7 @@ The data-frame consists of the following columns:
   Function assumes the current directory to be the root directory of the
   package being tested.
 }
+
 \examples{
 \dontrun{
 ## Example-1
@@ -57,4 +58,3 @@ time_commit(t_path, t_commit)
 \seealso{
 \code{\link[git2r]{commits}}
 }
-

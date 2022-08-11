@@ -1,0 +1,85 @@
+name: "receive"
+description: "Action to run Rperform benchmarks and upload the results."
+inputs:
+  cache-version:
+    description: "Integer to use as cache version. Increment to use new cache."
+    required: true
+    default: 1
+  rperform_ref:
+    description: "Which branch or tag of Rperform should be used. Mainly for debugging."
+    required: true
+    default: "@github-actions"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        
+    - name: Set up git user
+      run: |
+        git config --local user.name "GitHub Actions"
+        git config --local user.email "actions@github.com"
+      shell: bash
+
+    - name: Fetch base branch
+      run: |
+        git checkout -b "$GITHUB_HEAD_REF" # this is current ref. This is required for naming.
+        echo "$GITHUB_HEAD_REF"
+        echo "$GITHUB_BASE_REF"
+        # git branch $GITHUB_BASE_REF remotes/origin/$GITHUB_BASE_REF
+      shell: bash
+
+    - name: Setup R
+      uses: r-lib/actions/setup-r@v2
+
+    - name: Install dependencies
+      uses: r-lib/actions/setup-r-dependencies@v2
+      with:
+        cache-version: ${{ inputs.cache_version }}
+        extra-packages: |
+          any::ggplot2
+          any::dplyr
+          any::gert
+          any::glue
+          github::EngineerDanny/Rperform${{ inputs.rperform_ref}}
+          
+    - name: Remove global installation
+      run: |
+        pkg <- unlist(read.dcf('DESCRIPTION')[, 'Package'])
+        if (pkg %in% rownames(installed.packages())) {
+          remove.packages(pkg)
+          cat('removed package ', pkg, '.', sep = "")
+        }
+      shell: Rscript {0}
+
+    - name: "Save Current Time Integer"
+      id: "set-time"
+      uses: actions/github-script@v6
+      with:  
+        script: |
+          const date = new Date();
+          const time_int = date.getTime();
+          const time_str = time_int.toString().substring(0, 10);
+          return time_str;
+        result-encoding: string  
+
+    - name: Run benchmarks
+      run: Rperform::run_script("rperform/script.R")
+      shell: Rscript {0}
+
+    - name: Saves the PR number in an artifact
+      shell: bash
+      env:
+        PULL_REQUEST_NUMBER: ${{ github.event.number }}
+      run: |
+        echo $PULL_REQUEST_NUMBER > ./rperform/results/PR_NO
+        echo "${{steps.set-time.outputs.result}}"  > ./rperform/results/TIME_NO
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: pr
+        path: rperform/results/
+
