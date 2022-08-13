@@ -5,7 +5,7 @@
 
 [![R-CMD-check](https://github.com/EngineerDanny/Rperform/workflows/R-CMD-check/badge.svg)](https://github.com/EngineerDanny/Rperform/actions)
 
-[Rperform](https://github.com/analyticalmonk/Rperform) is a package that allows R developers to track quantitative performance metrics of their code. **Rperform only supports projects utilizing projects that use [testthat](https://github.com/r-lib/testthat) package for testing.**  It focuses on providing changes in a package’s performance metrics, related to `runtime` and `memory`, over different git versions and across git branches. It can prove to be particularly useful while measuring the possible changes which can be introduced by a pull request (PR).
+[Rperform](https://github.com/analyticalmonk/Rperform) is a package that allows R developers to track quantitative performance metrics of their code. **Rperform only supports projects utilizing [testthat](https://github.com/r-lib/testthat) package for testing.**  It focuses on providing changes in a package’s performance metrics, related to `runtime` and `memory`, over different git versions and across git branches. It can prove to be particularly useful while measuring the possible changes which can be introduced by a pull request (PR).
 
 - Rperform can be integrated with [Github Actions CI](https://github.com/features/actions) for developers to build and test their code from GitHub. Performance testing can be done anytime there is a PR. This is a great way to measure the performance of a PR before merging it.
 
