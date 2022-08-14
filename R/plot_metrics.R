@@ -253,7 +253,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5,
     ggplot2::geom_point(mapping = ggplot2::aes(sha, metric_val), 
                         data = time_data, color = "blue") +
     ggplot2::scale_y_log10() +
-    ggplot2::facet_grid(facets =  test_name ~ ., scales = "free") +
+    ggplot2::facet_wrap(facets =  test_name ~ ., scales = "free", ncol = 1) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -90, hjust = 0, vjust = 0.5)) +
     ggplot2::scale_x_discrete(limits = rev(time_data$sha), 
                               labels = time_data$message, expand = c(0.03, 0.03)) +
@@ -269,8 +269,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5,
   if (save_plots == TRUE) {
     .save_plots(
       test_plot = test_plot, test_data = test_data, test_name = curr_name, metric = "time", 
-      sys_time = sys_time, total_height_in, total_width_in,
-      resolution
+      sys_time = sys_time, total_height_in, total_width_in, resolution
     )
     print(test_plot)
   }
