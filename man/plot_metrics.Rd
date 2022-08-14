@@ -10,7 +10,10 @@ plot_metrics(
   num_commits = 5,
   save_data = FALSE,
   save_plots = FALSE,
-  interactive = FALSE
+  interactive = FALSE,
+  total_height_in,
+  total_width_in,
+  resolution
 )
 }
 \arguments{
@@ -40,6 +43,8 @@ If not set, a reasonable default will be used}
 
 \item{total_width_in}{The total width of the graph in inches.
 If not set, a reasonable default will be used}
+
+\item{resolution}{The resolution of the graph in dpi.}
 }
 \description{
 Given a test-file path, plot the metrics of entire file and individual

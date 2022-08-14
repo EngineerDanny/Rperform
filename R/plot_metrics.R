@@ -4,7 +4,7 @@
 ## package.
 ## Sample NOTE:
 ## plot_bmemory: no visible binding for global variable ‘metric_val’
-utils::globalVariables(c("metric_val", "test_name", "mid_val", 
+utils::globalVariables(c("metric_val", "test_name", "mid_val",
 "capture.output", "write.csv2"))
 
 #' Plot test-file metrics across versions.
@@ -36,6 +36,7 @@ utils::globalVariables(c("metric_val", "test_name", "mid_val",
 #' If not set, a reasonable default will be used
 #' @param total_width_in The total width of the graph in inches.
 #' If not set, a reasonable default will be used
+#' @param resolution The resolution of the graph in dpi.
 #'
 #' @examples
 #'
@@ -66,9 +67,12 @@ utils::globalVariables(c("metric_val", "test_name", "mid_val",
 #' @section WARNING:
 #'   Function assumes the current directory to be the root directory of the
 #'   repository/package being tested.
+#' @name plot_metrics
 #'
 
-plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, save_plots = FALSE, interactive = FALSE, total_height_in, total_width_in ){                     
+plot_metrics <- function(test_path, metric, num_commits = 5,
+  save_data = FALSE, save_plots = FALSE, interactive = FALSE,
+  total_height_in, total_width_in, resolution){                     
   stopifnot(is.character(test_path))
   stopifnot(length(test_path) == 1)
   stopifnot(is.character(metric))
@@ -87,14 +91,14 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
     if (interactive) {
       temp_out <- capture.output(.plot_interactive_time(test_path, num_commits, save_data, save_plots))
     } else {
-      temp_out <- capture.output(.plot_time(test_path, num_commits, save_data, save_plots, sys_time, total_height_in, total_width_in))      
+      temp_out <- capture.output(.plot_time(test_path, num_commits, save_data, save_plots, sys_time, total_height_in, total_width_in, resolution))      
     }
   }
   else if (metric == "memory") {
     if (interactive) {
       temp_out <- capture.output(.plot_interactive_mem(test_path, num_commits, save_data, save_plots))
     } else {
-      temp_out <- capture.output(.plot_mem(test_path, num_commits, save_data, save_plots, total_height_in, total_width_in))      
+      temp_out <- capture.output(.plot_mem(test_path, num_commits, save_data, save_plots, total_height_in, total_width_in, resolution))      
     }
   }
   else if (metric == "memtime") {
@@ -227,7 +231,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
 ##  -----------------------------------------------------------------------------------------
 
 
-.plot_time <- function(test_path, num_commits, save_data, save_plots, sys_time , total_height_in, total_width_in ){
+.plot_time <- function(test_path, num_commits, save_data, save_plots, sys_time , total_height_in, total_width_in, resolution){
   # Obtain the metrics data
   suppressMessages(time_data <- time_compare(test_path, num_commits))
   # Store the metrics data if save_data is TRUE
@@ -265,7 +269,8 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
   if (save_plots == TRUE) {
     .save_plots(
       test_plot = test_plot, test_data = test_data, test_name = curr_name, metric = "time", 
-      sys_time = sys_time, total_height_in, total_width_in
+      sys_time = sys_time, total_height_in, total_width_in,
+      resolution
     )
     print(test_plot)
   }
@@ -335,14 +340,13 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
 
 ##  -----------------------------------------------------------------------------------------
 
-.plot_mem <- function(test_path, num_commits, save_data, save_plots, total_height_in, total_width_in) {
+.plot_mem <- function(test_path, num_commits, save_data, save_plots, total_height_in, total_width_in, resolution) {
   
   # Obtain the metrics data
   suppressMessages(mem_data <- mem_compare(test_path, num_commits))
   
   # Store the metrics data if save_data is TRUE
   if (save_data){
-    
     # Store the metric data
     .save_data(mem_data, pattern = "*.[rR]$", replacement = "_mem.RData",
                replace_string = basename(test_path))
@@ -368,7 +372,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
     ggplot2::ggtitle(label = paste0("Variation in memory metrics for ", curr_name))
   
   if (save_plots == TRUE) {
-    .save_plots(test_plot = test_plot, test_data = mem_data, test_name = curr_name, metric = "memory", total_height_in, total_width_in)
+    .save_plots(test_plot = test_plot, test_data = mem_data, test_name = curr_name, metric = "memory", total_height_in, total_width_in, resolution)
     print(test_plot)
   }
   else {
@@ -909,7 +913,8 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
 
 ##  -----------------------------------------------------------------------------------------
 
-.save_plots <- function(test_plot, test_data, test_name, metric, sys_time = Sys.time(), total_height_in, total_width_in) {
+.save_plots <- function(test_plot, test_data, test_name, metric,
+        sys_time = Sys.time(), total_height_in = 8, total_width_in = 10.7, resolution = 300) {
   # get date time in milliseconds
   date_time <- as.integer(sys_time)
 
@@ -926,12 +931,11 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
   }
 
 
-  dynamic_width <-  2.5 * base::nrow(test_data)
-  
-  build_output <- ggplot2::ggplot_build(test_plot)
-  no_of_panels <- length(levels(build_output$data[[1]]$PANEL))
+  # dynamic_width <-  2.5 * base::nrow(test_data)
+  # build_output <- ggplot2::ggplot_build(test_plot)
+  # no_of_panels <- length(levels(build_output$data[[1]]$PANEL))
   # max_metric <- max(test_data$metric_val, na.rm = TRUE)
-  dynamic_height <- 300 * no_of_panels
+  # dynamic_height <- 300 * no_of_panels
 
   curr_name <- gsub(pattern = " ", replacement = "_", x = test_name)
   curr_name <- gsub(pattern = ".[rR]$", replacement = "", curr_name)
@@ -942,7 +946,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
   #                 width = dynamic_width,
   #                 height = dynamic_height,
   #                 units = units)
-  grDevices::png(filename = png_file, width = dynamic_width, height = dynamic_height, units = "px")
+  grDevices::png(filename = png_file, width = total_width_in, height = total_height_in, units = "in", res = resolution)
   print(test_plot)
   grDevices::dev.off()
 }
