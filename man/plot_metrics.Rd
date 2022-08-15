@@ -10,7 +10,9 @@ plot_metrics(
   num_commits = 5,
   save_data = FALSE,
   save_plots = FALSE,
-  interactive = FALSE
+  interactive = FALSE,
+  total_height_in,
+  total_width_in
 )
 }
 \arguments{
@@ -34,6 +36,12 @@ printed. (default set to TRUE)}
 
 \item{interactive}{If set to TRUE, the plots generated are interactive. The
 resulting plot is rendered in the default browser.}
+
+\item{total_height_in}{The total height of the graph in inches.
+If not set, a reasonable default will be used}
+
+\item{total_width_in}{The total width of the graph in inches.
+If not set, a reasonable default will be used}
 }
 \description{
 Given a test-file path, plot the metrics of entire file and individual

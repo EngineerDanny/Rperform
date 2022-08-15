@@ -32,6 +32,10 @@ utils::globalVariables(c("metric_val", "test_name", "mid_val",
 #'   printed. (default set to TRUE)
 #' @param interactive If set to TRUE, the plots generated are interactive. The
 #'   resulting plot is rendered in the default browser.
+#' @param total_height_in The total height of the graph in inches.
+#' If not set, a reasonable default will be used
+#' @param total_width_in The total width of the graph in inches.
+#' If not set, a reasonable default will be used
 #'
 #' @examples
 #'
@@ -64,8 +68,7 @@ utils::globalVariables(c("metric_val", "test_name", "mid_val",
 #'   repository/package being tested.
 #'
 
-plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, save_plots = FALSE,
-                         interactive = FALSE){                     
+plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, save_plots = FALSE, interactive = FALSE, total_height_in, total_width_in ){                     
   stopifnot(is.character(test_path))
   stopifnot(length(test_path) == 1)
   stopifnot(is.character(metric))
@@ -84,14 +87,14 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
     if (interactive) {
       temp_out <- capture.output(.plot_interactive_time(test_path, num_commits, save_data, save_plots))
     } else {
-      temp_out <- capture.output(.plot_time(test_path, num_commits, save_data, save_plots, sys_time))      
+      temp_out <- capture.output(.plot_time(test_path, num_commits, save_data, save_plots, sys_time, total_height_in, total_width_in))      
     }
   }
   else if (metric == "memory") {
     if (interactive) {
       temp_out <- capture.output(.plot_interactive_mem(test_path, num_commits, save_data, save_plots))
     } else {
-      temp_out <- capture.output(.plot_mem(test_path, num_commits, save_data, save_plots))      
+      temp_out <- capture.output(.plot_mem(test_path, num_commits, save_data, save_plots, total_height_in, total_width_in))      
     }
   }
   else if (metric == "memtime") {
@@ -154,7 +157,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
     
     
     if (save_plots == TRUE) {
-      .save_plots(test_plot = test_plot, test_name = t_names[num], metric = "testMetrics")
+      .save_plots(test_plot = test_plot, test_data = test_frame, test_name = t_names[num], metric = "testMetrics")
       print(test_plot)
     }
     else {
@@ -224,12 +227,11 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
 ##  -----------------------------------------------------------------------------------------
 
 
-.plot_time <- function(test_path, num_commits, save_data, save_plots, sys_time) {
+.plot_time <- function(test_path, num_commits, save_data, save_plots, sys_time , total_height_in, total_width_in ){
   # Obtain the metrics data
   suppressMessages(time_data <- time_compare(test_path, num_commits))
   # Store the metrics data if save_data is TRUE
   if (save_data){
-    
     # Store the metric data
     .save_data(time_data,
       pattern = "*.[rR]$", replacement = "_time.RData",
@@ -244,23 +246,26 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
   # Plot the metric data
   tryCatch(expr =   {test_plot <- 
     ggplot2::ggplot() +
-    ggplot2::geom_point(mapping = ggplot2::aes(message, metric_val), 
+    ggplot2::geom_point(mapping = ggplot2::aes(sha, metric_val), 
                         data = time_data, color = "blue") +
+    ggplot2::scale_y_log10() +
     ggplot2::facet_grid(facets =  test_name ~ ., scales = "free") +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -45)) +
-    ggplot2::scale_x_discrete(limits = rev(levels(time_data$message))) +
-    # In the above 5 lines of code, the first line creates the basic qplot. The
-    # fourth and fifth lines display the x-axis labels at 90 degrees to the
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -90, hjust = 0, vjust = 0.5)) +
+    ggplot2::scale_x_discrete(limits = rev(time_data$sha), 
+                              labels = time_data$message, expand = c(0.03, 0.03)) +
+    # In the above 6 lines of code, the first line creates the basic qplot. The
+    # fifth and sixth lines display the x-axis labels at 90 degrees to the
     # horizontal and correct the order of message labels on the x -axis,
     # respectively.
     ggplot2::xlab("Commit message") +
     ggplot2::ylab("Time (in seconds)") +
-    ggplot2::ggtitle(label = paste0("Variation in time metrics for ", curr_name))
+    ggplot2::ggtitle(label = paste0("Variation in time metrics for ", curr_name))+ 
+    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5, face = "bold"))
   
   if (save_plots == TRUE) {
     .save_plots(
-      test_plot = test_plot, test_name = curr_name, metric = "time",
-      width = 1600, height = 1200, sys_time = sys_time
+      test_plot = test_plot, test_data = test_data, test_name = curr_name, metric = "time", 
+      sys_time = sys_time, total_height_in, total_width_in
     )
     print(test_plot)
   }
@@ -330,7 +335,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
 
 ##  -----------------------------------------------------------------------------------------
 
-.plot_mem <- function(test_path, num_commits, save_data, save_plots) {
+.plot_mem <- function(test_path, num_commits, save_data, save_plots, total_height_in, total_width_in) {
   
   # Obtain the metrics data
   suppressMessages(mem_data <- mem_compare(test_path, num_commits))
@@ -363,7 +368,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5, save_data = FALSE, 
     ggplot2::ggtitle(label = paste0("Variation in memory metrics for ", curr_name))
   
   if (save_plots == TRUE) {
-    .save_plots(test_plot = test_plot, test_name = curr_name, metric = "memory")
+    .save_plots(test_plot = test_plot, test_data = mem_data, test_name = curr_name, metric = "memory", total_height_in, total_width_in)
     print(test_plot)
   }
   else {
@@ -701,7 +706,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
     curr_name <- paste0(branch1, "_", branch2, "_", t_names[num])
     
     if (save_plots == TRUE) {
-      .save_plots(test_plot = test_plot, test_name = t_names[num],
+      .save_plots(test_plot = test_plot,test_data = test_frame, test_name = t_names[num],
                   metric = "testMetrics")
       print(test_plot)
     } else {
@@ -776,8 +781,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
                                     branch2, " and ", branch1))
   
   if (save_plots == TRUE) {
-    .save_plots(test_plot = test_plot, test_name = curr_name, metric = "time",
-                width = 1600, height = 900)
+    .save_plots(test_plot = test_plot, test_data = time_data, test_name = curr_name, metric = "time")
     print(test_plot)
   }
   else {
@@ -851,7 +855,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
                                     branch2, " and ", branch1))
   
   if (save_plots == TRUE) {
-    .save_plots(test_plot = test_plot, test_name = curr_name, metric = "memory")
+    .save_plots(test_plot = test_plot, test_data = mem_data, test_name = curr_name, metric = "memory")
     print(test_plot)
   }
   else {
@@ -884,7 +888,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
     prepare_dir(target_dir)
     # Save the metric data as csv file
     csv_file <- file.path(target_dir, paste0("test_data", ".csv"))
-    write.csv2(time_frame,
+    write.csv(time_frame,
       file = csv_file
     )
     create_pr_comment(time_frame, "test_function",target_dir, folder_name)
@@ -896,7 +900,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
     # Save the metric data as csv file
     csv_file <- file.path(target_dir, paste0("test_data", ".csv"))
 
-    write.csv2(mem_frame,
+    write.csv(mem_frame,
       file = csv_file
     )
     create_pr_comment(mem_frame, "test_function", target_dir, folder_name)
@@ -905,7 +909,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
 
 ##  -----------------------------------------------------------------------------------------
 
-.save_plots <- function(test_plot, test_name, metric, width = 1024, height = 768, units = "px", sys_time = Sys.time()) {
+.save_plots <- function(test_plot, test_data, test_name, metric, sys_time = Sys.time(), total_height_in, total_width_in) {
   # get date time in milliseconds
   date_time <- as.integer(sys_time)
 
@@ -921,10 +925,23 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
     prepare_dir(target_dir)
   }
 
+  # dynamic_width <-  400
+
+  # build_output <- ggplot2::ggplot_build(test_plot)
+  # no_of_panels <- length(levels(build_output$data[[1]]$PANEL))
+  # dynamic_height <- 1600
+
   curr_name <- gsub(pattern = " ", replacement = "_", x = test_name)
   curr_name <- gsub(pattern = ".[rR]$", replacement = "", curr_name)
   png_file <- file.path(target_dir, paste0("test_image", ".png"))
-  grDevices::png(filename = png_file, width = width, height = height, units = units)
+
+  # ggplot2::ggsave(png_file,
+  #                 plot = test_plot,
+  #                 width = dynamic_width,
+  #                 height = dynamic_height,
+  #                 units = units)
+
+  grDevices::png(filename = png_file, width = 1024, height = 768, units = "px")
   print(test_plot)
   grDevices::dev.off()
 }

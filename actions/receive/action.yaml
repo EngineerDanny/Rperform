@@ -8,7 +8,7 @@ inputs:
   rperform_ref:
     description: "Which branch or tag of Rperform should be used. Mainly for debugging."
     required: true
-    default: "@github-actions"
+    default: "@master"
 
 runs:
   using: "composite"
@@ -45,7 +45,7 @@ runs:
           any::gert
           any::glue
           github::EngineerDanny/Rperform${{ inputs.rperform_ref}}
-  
+
     - name: "Save Current Time Integer"
       id: "set-time"
       uses: actions/github-script@v6
