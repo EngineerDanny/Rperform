@@ -38,6 +38,6 @@ jobs:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: EngineerDanny/Rperform/actions/receive@github-actions
+      - uses: EngineerDanny/Rperform/actions/receive@master
         with:
           cache-version: 1
