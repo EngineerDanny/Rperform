@@ -929,7 +929,6 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
     prepare_dir(target_dir)
   }
 
-
   # dynamic_width <-  2.5 * base::nrow(test_data)
   # build_output <- ggplot2::ggplot_build(test_plot)
   # no_of_panels <- length(levels(build_output$data[[1]]$PANEL))
@@ -945,7 +944,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
   #                 width = dynamic_width,
   #                 height = dynamic_height,
   #                 units = units)
-  grDevices::png(filename = png_file, width = total_width_in, height = total_height_in, units = "in", res = resolution)
+  grDevices::png(filename = png_file, width = total_width_in, height = total_height_in, units = "px")
   print(test_plot)
   grDevices::dev.off()
 }

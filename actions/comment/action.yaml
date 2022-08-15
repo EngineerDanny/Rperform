@@ -102,34 +102,30 @@ runs:
           const initTime = Number(fs.readFileSync('./rperform-results/TIME_NO'));
           
           var pr_files = readFiles('./rperform-results');
-          const commentsBody = "";
-
+          var report = "";
            pr_files.forEach(file => {
             const split1 = file.split("_");
             const split2 = split1[1].split("/");
             const scriptTime =  Number(split2[0]);
-
             if(scriptTime >= initTime){
               const fileBody = fs.readFileSync(file).toString();
-              commentsBody += fileBody;
+              report += fileBody;
             }
           });
-
             // Get the list of all the comments on the PR
             const response = await github.rest.issues.listComments({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: prNumber
             })
-            const oldComments = response.data;
-
+            const comments = response.data;
             // Get the comment made by the action
-            const actionComment = oldComments.find(comment => comment.user.login === "rperform-action");
-
+            const commentIdentifier = "<!-- Rperform-action comment-->"
+            const actionComment = comments.find(comment => comment.body.includes(commentIdentifier))
+            const defaultFooter = "\nFurther explanation regarding interpretation and methodology can be found in the [documentation](https://github.com/analyticalmonk/Rperform#readme)";
+            const newCommentBody = `${commentIdentifier}\n${report}\n${defaultFooter}`;
             // Print the comment made by the action
-            if (actionComment) {
-                console.log(actionComment);
-            }
+            console.log(actionComment);
             
             // If actionComment exists, update it otherwise create a new comment
             if (actionComment) {
@@ -137,39 +133,13 @@ runs:
                     owner: context.repo.owner,
                     repo: context.repo.repo,
                     comment_id: actionComment.id,
-                    body: commentsBody
+                    body: newCommentBody
                 })
             } else {
                 await github.rest.issues.createComment({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
                     issue_number: prNumber,
-                    body: commentsBody
+                    body: newCommentBody
                 })
             }
-    - uses: actions/github-script@v5
-      if: always()
-      with:
-        script: |
-          let url = '${{ github.event.workflow_run.html_url }}'
-          let any_failed = ${{ steps.comment.outcome == 'failure' || steps.download.outcome == 'failure' }}
-          let state = 'success'
-          let description = 'Commenting succeeded!'
-
-          if(${{ github.event.workflow_run.conclusion == 'failure'}} || any_failed) {
-            state = 'failure'
-            description = 'Commenting failed!'
-            if(any_failed) {
-              url = "https://github.com/${{github.repository}}/actions/runs/" + 
-                    "${{ github.run_id }}"
-            }
-          }
-          github.rest.repos.createCommitStatus({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            sha: '${{ github.event.workflow_run.head_sha}}',
-            state: state,
-            target_url: url,
-            description: description,
-            context: 'rperform comment'
-          })
