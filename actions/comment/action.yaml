@@ -103,18 +103,15 @@ runs:
           
           var pr_files = readFiles('./rperform-results');
           var report = "";
-
            pr_files.forEach(file => {
             const split1 = file.split("_");
             const split2 = split1[1].split("/");
             const scriptTime =  Number(split2[0]);
-
             if(scriptTime >= initTime){
               const fileBody = fs.readFileSync(file).toString();
               report += fileBody;
             }
           });
-
             // Get the list of all the comments on the PR
             const response = await github.rest.issues.listComments({
                 owner: context.repo.owner,
@@ -122,12 +119,11 @@ runs:
                 issue_number: prNumber
             })
             const comments = response.data;
-
             // Get the comment made by the action
             const commentIdentifier = "<!-- Rperform-action comment-->"
             const actionComment = comments.find(comment => comment.body.includes(commentIdentifier))
-            const newCommentBody = `${commentIdentifier}\n${report}`
-
+            const defaultFooter = "\nFurther explanation regarding interpretation and methodology can be found in the [documentation](https://github.com/analyticalmonk/Rperform#readme)";
+            const newCommentBody = `${commentIdentifier}\n${report}\n${defaultFooter}`;
             // Print the comment made by the action
             console.log(actionComment);
             
