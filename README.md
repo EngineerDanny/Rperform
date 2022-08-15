@@ -11,14 +11,15 @@
 
 - Rperform can be used with [Travis-CI](https://www.travis-ci.com) to do performance testing during Travis builds by making changes to the repo’s `.travis.yml` file. For integrating Rperform with your travis build, check out the instructions provided on the [Rperform Wiki](https://github.com/analyticalmonk/Rperform/wiki/Integrating-Rperform-with-Travis-CI).
 
-
-
-
 ***For more information, tutorials and related blog posts, go through the [Rperform wiki](https://github.com/analyticalmonk/Rperform/wiki/Integrating-Rperform-with-Travis-CI).***
 
 *The project was initiated as a part of the [Google Summer of Code 2015](https://github.com/rstats-gsoc/gsoc2015/wiki/Test-timings-on-Travis) program and accepted into [Google Summer of Code 2016](https://github.com/rstats-gsoc/gsoc2016/wiki/Rperform:-Performance-analysis-of-R-package-code) program.
 
 *The project has also been accepted into the [Google Summer of Code 2022](https://github.com/rstats-gsoc/gsoc2022/wiki/Rperform) program with [Toby Dylan Hocking](https://github.com/tdhock), [Akash Tandon](https://github.com/analyticalmonk) and [Randy Lai](mailto:randy.cs.lai@gmail.com) as the mentors.
+
+# Usage With Github Actions
+
+You can set up your Github CI with the Rperform package and use it to test your packages. Check out this [Wiki](https://github.com/EngineerDanny/Rperform/wiki/Setting-up-Github-CI-with-Rperform) page and follow the instructions. 
 
 # Installation
 ``` r
@@ -128,33 +129,3 @@ getwd()
 13.5       test-join.r     max_mem_mb   pass      0.148 Can now use CRA 2015-01-08 14:09:43
 13.6       test-join.r     leak_mb      pass      0.148 Can now use CRA 2015-01-08 14:09:43
 ```
-
-## Advanced Usage
-### Setting up Github CI with Rperform
-Rperform has great flexibility and usability. It internally supports automating the tests of your code on Github and creating comments to display the results. To set-up Rperform for your GitHub CI worflow, initialize Rperform with the command :
-
-```r
-Rperform:init_rperform()
-```
-- The above command creates the Github workflow directory, which is the `.github/workflow/` directory and populates it with the needed workflow files (`rperform-receive.yaml` and `rperform-comment.yaml`).
-
-- It also creates the `rperform` directory and populates it with files which make test configuration and customisation easier. 
-
-### Running the script
-
-One of the most important files in the `rperform` directory is the `script.R` file, which is where the Rperform test functions should be written. The functions written in the file will be ran when the workflow is triggered. You can write multiple Rperform functions in the `script.R` file.
-
-With only these two functions, you can run four different types of tests:
-1. `Rperform::plot_metrics()` 
-2. `Rperform::plot_branchmetrics()`
-
-**NOTE:** The `save_plot` and `save_image` parameters must always be set to TRUE so that the outputs will be saved and displayed without any issues.
-
-After this set-up, anytime there is a Pull Request in the repository, the workflow will be triggered and the tests will be run. The results will be commented out by Github Bot in the PR.
-### Customising the PR comment
-There are the `header.R` and `footer.R` files inside the `rperform` directory which you can edit to customize the PR comment. The `glue` package is used to format and interpolate the strings so as to join the different sections of the comment. It must be noted that since any comment text is rendered in Markdown format, you must use the markdown syntax to edit the comment. 
-
-### Results
-Below is an example of the auto comment that is generated when the workflow is triggered by a PR.
-![image](./images/Rperform_comment.png)
-
