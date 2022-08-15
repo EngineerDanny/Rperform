@@ -59,12 +59,12 @@ init_rperform <- function(overwrite = FALSE) {
 
   if (has_written_script) {
     cli::cli_ul(
-      "Replace the mtcars sample code in `Rperform/script.R` with code from your package you want to benchmark."
+      "Replace the sample code in `rperform/script.R` with the Rperform functions for the benchmarking."
     )
   }
 
   cli::cli_alert_info(
-    "You can modify the PR comment, see {.code ?Rperform::pr_comment}."
+    "You can modify the PR comment with the header.R and footer.R."
   )
 
   cli::cli_ul(paste0(
