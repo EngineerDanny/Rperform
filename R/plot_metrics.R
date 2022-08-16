@@ -72,7 +72,7 @@ utils::globalVariables(c("metric_val", "test_name", "mid_val",
 
 plot_metrics <- function(test_path, metric, num_commits = 5,
   save_data = FALSE, save_plots = FALSE, interactive = FALSE,
-  total_height_in, total_width_in, resolution){                     
+  total_height_in = 8, total_width_in = 10.7, resolution = 300){                     
   stopifnot(is.character(test_path))
   stopifnot(length(test_path) == 1)
   stopifnot(is.character(metric))
@@ -253,7 +253,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5,
     ggplot2::geom_point(mapping = ggplot2::aes(sha, metric_val), 
                         data = time_data, color = "blue") +
     ggplot2::scale_y_log10() +
-    ggplot2::facet_wrap(facets =  test_name ~ ., scales = "free", ncol = 1) +
+    ggplot2::facet_wrap(test_name ~ ., scales = "free", ncol = 1) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -90, hjust = 0, vjust = 0.5)) +
     ggplot2::scale_x_discrete(limits = rev(time_data$sha), 
                               labels = time_data$message, expand = c(0.03, 0.03)) +
@@ -265,6 +265,8 @@ plot_metrics <- function(test_path, metric, num_commits = 5,
     ggplot2::ylab("Time (in seconds)") +
     ggplot2::ggtitle(label = paste0("Variation in time metrics for ", curr_name))+ 
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5, face = "bold"))
+    
+    print(test_plot)
   
   if (save_plots == TRUE) {
     .save_plots(
@@ -913,7 +915,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
 ##  -----------------------------------------------------------------------------------------
 
 .save_plots <- function(test_plot, test_data, test_name, metric,
-        sys_time = Sys.time(), total_height_in = 8, total_width_in = 10.7, resolution = 300) {
+        sys_time = Sys.time(), total_height_in, total_width_in, resolution) {
   # get date time in milliseconds
   date_time <- as.integer(sys_time)
 

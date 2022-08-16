@@ -1,7 +1,7 @@
 Package: Rperform
 Type: Package
 Title: Rperform - Performance testing for R packages
-Version: 0.0.4
+Version: 0.0.5
 License: GPL-3
 Date: 2015-05-29
 Author: Akash Tandon (analyticalmonk on GitHub), Toby Dylan Hocking
