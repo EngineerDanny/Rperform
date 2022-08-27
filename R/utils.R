@@ -185,7 +185,7 @@ get_comment_text <- function(part = c("footer", "header"), default,
   if (!fs::file_exists(path)) {
     cli::cli_alert_info("No comment {part} found. Using default.")
   } else {
-    text <- base::eval(base::parse(path))
+    text <- base::eval(base::parse(path), envir = env)
     if (!is.character(text)) {
       cli::cli_warn(
         c("Parsed comment {part} is not a valid string. Using default.",
