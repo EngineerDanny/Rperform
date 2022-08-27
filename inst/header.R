@@ -6,7 +6,7 @@ glue::glue(
     " after running `",
     test_function,
     "` function",
-    " on this PR branch.",
+    " on this PR branch. ",
     "Check out the test results data set in csv ",
     csv_url,
     "\n",
