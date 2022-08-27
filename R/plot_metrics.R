@@ -946,7 +946,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
   #                 width = dynamic_width,
   #                 height = dynamic_height,
   #                 units = units)
-  grDevices::png(filename = png_file, width = total_width_in, height = total_height_in, units = "in")
+  grDevices::png(filename = png_file, width = total_width_in, height = total_height_in, units = "in", res = resolution)
   print(test_plot)
   grDevices::dev.off()
 }
