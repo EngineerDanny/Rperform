@@ -896,7 +896,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
     write.csv(time_frame,
       file = csv_file
     )
-    create_pr_comment(time_frame, "Time Metrics function",target_dir, folder_name)
+    create_pr_comment(time_frame, "Time Metrics", target_dir, folder_name)
   } else if (grepl(pattern = "mem", x = replacement) > 0) {
     folder_name <- paste0("MemoryMetrics_", date_time)
     target_dir <- paste0("./rperform/results/MemoryMetrics_", date_time)
@@ -908,7 +908,7 @@ plot_branchmetrics <- function(test_path, metric, branch1, branch2 = "master",
     write.csv(mem_frame,
       file = csv_file
     )
-    create_pr_comment(mem_frame, "Memory Metrics function", target_dir, folder_name)
+    create_pr_comment(mem_frame, "Memory Metrics", target_dir, folder_name)
   }
 }
 
