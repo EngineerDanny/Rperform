@@ -349,8 +349,11 @@ plot_metrics <- function(test_path, metric, num_commits = 5,
   # Store the metrics data if save_data is TRUE
   if (save_data){
     # Store the metric data
-    .save_data(mem_data, pattern = "*.[rR]$", replacement = "_mem.RData",
-    replace_string = basename(test_path))
+    .save_data(mem_data, 
+      pattern = "*.[rR]$", replacement = "_mem.RData",
+      replace_string = basename(test_path),
+      sys_time = sys_time
+    )
   }
   
   curr_name <- gsub(pattern = " ", replacement = "_", x = basename(test_path))
