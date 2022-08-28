@@ -362,7 +362,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5,
   tryCatch(expr = {test_plot <- 
     ggplot2::ggplot(data = mem_data, mapping = ggplot2::aes(message, metric_val)) +
     ggplot2::geom_point(color = "blue") +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -45),
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -90, hjust = 0, vjust = 0.5),
                    strip.text.x = ggplot2::element_text(size = 10, face = "bold")) +
     ggplot2::scale_x_discrete(limits = rev(levels(mem_data$message))) +
     ggplot2::facet_grid(test_name ~ metric_name, scales = "free") +
