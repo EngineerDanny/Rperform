@@ -255,7 +255,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5,
     ggplot2::scale_y_log10() +
     ggplot2::facet_wrap(test_name ~ ., scales = "free", ncol = 1) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -90, hjust = 0, vjust = 0.5)) +
-    ggplot2::scale_x_discrete(limits = rev(time_data$sha), 
+    ggplot2::scale_x_discrete(limits = rev(levels(time_data$sha)), 
                               labels = time_data$message, expand = c(0.03, 0.03)) +
     # In the above 6 lines of code, the first line creates the basic qplot. The
     # fifth and sixth lines display the x-axis labels at 90 degrees to the
@@ -350,7 +350,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5,
   if (save_data){
     # Store the metric data
     .save_data(mem_data, pattern = "*.[rR]$", replacement = "_mem.RData",
-               replace_string = basename(test_path))
+    replace_string = basename(test_path))
   }
   
   curr_name <- gsub(pattern = " ", replacement = "_", x = basename(test_path))
@@ -370,7 +370,8 @@ plot_metrics <- function(test_path, metric, num_commits = 5,
     # the plots for the max memory and leak memory metrics.
     ggplot2::ylab(label = "Memory (in Mb)") +
     ggplot2::xlab(label = "Commit messages") +
-    ggplot2::ggtitle(label = paste0("Variation in memory metrics for ", curr_name))
+    ggplot2::ggtitle(label = paste0("Variation in memory metrics for ", curr_name)) + 
+    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5, face = "bold"))
   
   if (save_plots == TRUE) {
     .save_plots(test_plot = test_plot, test_data = mem_data, test_name = curr_name, metric = "memory", total_height_in, total_width_in, resolution)
