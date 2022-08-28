@@ -375,7 +375,9 @@ plot_metrics <- function(test_path, metric, num_commits = 5,
   
   if (save_plots == TRUE) {
     .save_plots(test_plot = test_plot, test_data = mem_data,
-    test_name = curr_name, metric = "memory", sys_time = sys_time, total_height_in, total_width_in, resolution)
+    test_name = curr_name, metric = "memory", 
+    sys_time = sys_time, total_height_in, total_width_in, 
+    resolution)
     print(test_plot)
   }
   else {
