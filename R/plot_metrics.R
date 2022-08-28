@@ -98,7 +98,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5,
     if (interactive) {
       temp_out <- capture.output(.plot_interactive_mem(test_path, num_commits, save_data, save_plots))
     } else {
-      temp_out <- capture.output(.plot_mem(test_path, num_commits, save_data, save_plots, total_height_in, total_width_in, resolution))      
+      temp_out <- capture.output(.plot_mem(test_path, num_commits, save_data, save_plots, sys_time, total_height_in, total_width_in, resolution))      
     }
   }
   else if (metric == "memtime") {
@@ -341,7 +341,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5,
 
 ##  -----------------------------------------------------------------------------------------
 
-.plot_mem <- function(test_path, num_commits, save_data, save_plots, total_height_in, total_width_in, resolution) {
+.plot_mem <- function(test_path, num_commits, save_data, save_plots, sys_time, total_height_in, total_width_in, resolution) {
   
   # Obtain the metrics data
   suppressMessages(mem_data <- mem_compare(test_path, num_commits))
@@ -374,7 +374,8 @@ plot_metrics <- function(test_path, metric, num_commits = 5,
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5, face = "bold"))
   
   if (save_plots == TRUE) {
-    .save_plots(test_plot = test_plot, test_data = mem_data, test_name = curr_name, metric = "memory", total_height_in, total_width_in, resolution)
+    .save_plots(test_plot = test_plot, test_data = mem_data,
+    test_name = curr_name, metric = "memory", sys_time = sys_time, total_height_in, total_width_in, resolution)
     print(test_plot)
   }
   else {
