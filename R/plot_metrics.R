@@ -365,7 +365,7 @@ plot_metrics <- function(test_path, metric, num_commits = 5,
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -90, hjust = 0, vjust = 0.5),
                    strip.text.x = ggplot2::element_text(size = 10, face = "bold")) +
     ggplot2::scale_x_discrete(limits = rev(levels(mem_data$message))) +
-    ggplot2::facet_grid(test_name ~ metric_name, scales = "free") +
+    ggplot2::facet_wrap(test_name ~ metric_name, scales = "free", ncol = 2 ) +
     # In the above 5 lines of code, the first line creates the basic qplot. The
     # third and fourth lines display the x-axis labels at 90 degrees to the
     # horizontal and correct the order of message labels on the x -axis,
