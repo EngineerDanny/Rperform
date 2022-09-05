@@ -19,7 +19,10 @@
 
 # Usage With Github Actions
 
-You can set up your Github CI with the Rperform package and use it to test your packages. Check out this [Wiki](https://github.com/EngineerDanny/Rperform/wiki/Setting-up-Github-CI-with-Rperform) page and follow the instructions. 
+- You can set up your Github CI with the Rperform package and use it to test your packages.
+- **NOTE : You must initialize Rperform on the main/master branch with `Rperform::init_rperform()` before there can be a child branch which a PR can be opened from**
+
+- Check out this [Wiki](https://github.com/EngineerDanny/Rperform/wiki/Setting-up-Github-CI-with-Rperform) page and follow the instructions. 
 
 # Installation
 ``` r
